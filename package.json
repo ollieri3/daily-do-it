@@ -1,0 +1,14 @@
+{
+  "name": "daily-do-it",
+  "version": "1.0.0",
+  "description": "",
+  "main": "daily-do-it.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "volta": {
+    "node": "18.16.1"
+  }
+}
