@@ -2,13 +2,16 @@
   "name": "daily-do-it",
   "version": "1.0.0",
   "description": "",
-  "main": "src/daily-do-it.js",
+  "main": "dist/daily-do-it.js",
+  "type": "module",
   "scripts": {
-    "start": "node dist/daily-do-it.js",
+    "start": "npm run build && concurrently --kill-others \"npx tsc --watch\" \"nodemon dist/daily-do-it.js\"",
     "build": "npx tsc",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/daily-do-it.js\""
+    "prebuild": "npm run clean && npm run copy-files",
+    "clean": "rm -rf dist",
+    "copy-files": "copyfiles -u 1 src/views/**/* src/views/*.* dist/"
   },
-  "author": "",
+  "author": "Oliver Ridsdale",
   "license": "ISC",
   "volta": {
     "node": "18.16.1"
@@ -21,7 +24,9 @@
     "@types/express": "^4.17.17",
     "@types/node": "^20.3.2",
     "concurrently": "^8.2.0",
+    "copyfiles": "^2.4.1",
     "nodemon": "^2.0.22",
+    "portfinder": "^1.0.32",
     "typescript": "^5.1.3"
   }
 }

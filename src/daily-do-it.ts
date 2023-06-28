@@ -1,8 +1,11 @@
 import express from "express";
 import { engine } from "express-handlebars";
 import { fileURLToPath } from "url";
+import { getPortPromise as getPort } from "portfinder";
 
-import * as handlers from "./lib/handlers";
+import { notFound } from "./lib/handlers.js";
+
+const port = await getPort();
 
 const app = express();
 
@@ -13,7 +16,8 @@ app.engine('handlebars', engine({
   defaultLayout: "main"
 }));
 app.set("view engine", "handlebars");
-app.set("views", fileURLToPath( new URL('.', import.meta.url) + '/public'));
+
+app.set("views", fileURLToPath( new URL('.', import.meta.url) + 'views'));
 
 // Routes
 app.get("/", (_, res) => {
@@ -21,10 +25,9 @@ app.get("/", (_, res) => {
   res.send("Hello World");
 })
 
-app.use(handlers.notFound);
+app.use(notFound);
 
-
-app.listen(3000, () => console.log(
-  `Express started on http://localhost:${3000};` +
+app.listen(port, () => console.log(
+  `Express started on http://localhost:${port} \n` +
   `Press Ctrl-C to terminate`
 ));
