@@ -2,8 +2,20 @@ import express from "express";
 import { engine } from "express-handlebars";
 import { fileURLToPath } from "url";
 import { getPortPromise as getPort } from "portfinder";
+import { randomBytes, pbkdf2, timingSafeEqual } from "crypto";
+import pg from "pg";
+import { Strategy as LocalStrategy } from "passport-local";
+import passport from "passport";
 
 import { notFound } from "./lib/handlers.js";
+
+const pool = new pg.Pool({
+  user: "postgres",
+  host: "localhost",
+  database: "dailydoit",
+  password: "secret", // This will be changed before deployment
+  port: 5432
+});
 
 const port = await getPort();
 
@@ -19,11 +31,78 @@ app.set("view engine", "handlebars");
 
 app.set("views", fileURLToPath( new URL('.', import.meta.url) + 'views'));
 
+// Enable reading of URL Encoded Requst bodies
+app.use(express.urlencoded());
+
+
+
+
+// Passport Setup
+
+passport.use('local', new LocalStrategy( async function verify(email, password, cb) {
+  console.log("Verify called", email, password);
+
+  const { rows } = await pool.query(`SELECT email, salt, hashed_password FROM users WHERE email = $1`, [email]);
+  const row = rows[0];
+
+  if (!row) {
+    console.log("User doesn't exist");
+    return cb(null, false, {message: 'Incorrect username or password.'});
+  }
+
+  const salt = Buffer.from(row.salt, "hex");
+  pbkdf2(password, salt, 600_000, 32, 'sha256', (err, derivedKey) => {
+    if(err) return cb(err);
+    const hash = Buffer.from(row.hashed_password, "hex");
+    if(!timingSafeEqual(hash, derivedKey)) {
+      return cb(null, false, {message: 'Incorrect username or password'});
+    }
+    return cb(null, row);
+  });
+
+}));
+
+
 // Routes
 app.get("/", (_, res) => {
   res.contentType("text/plain");
   res.send("Hello World");
 })
+
+app.get("/signin", (req, res) => {
+  res.render("signin");
+});
+
+app.post('/signin', passport.authenticate('local', {
+  session: false, // Swap this out once session support in place
+  successRedirect: "/",
+  failureRedirect: "/signin"
+}));
+
+app.get("/signup", (req, res) => {
+  res.render("signup");
+});
+
+app.post("/signup", (req, res, next) => {
+  const salt = randomBytes(16);
+  pbkdf2(req.body.password, salt, 600_000, 32, "sha256", async (err, derivedKey) => {
+    if(err) return next(err);
+    const hashedPassword = derivedKey.toString("hex");
+    const saltString = salt.toString("hex")
+    try {
+      await pool.query(`INSERT INTO users(email, hashed_password, salt) VALUES($1, $2, $3) RETURNING email`,[
+        req.body.email,
+        hashedPassword,
+        saltString
+      ]);
+    } catch (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+
+
+});
 
 app.use(notFound);
 

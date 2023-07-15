@@ -14,7 +14,9 @@ const client = new pg.Client({
 
 const createScript = `
   CREATE TABLE IF NOT EXISTS users (
-    username varchar(200) NOT NULL
+    email varchar(200) NOT NULL,
+    hashed_password varchar(255) NOT NULL,
+    salt varchar(255) NOT NULL
   );
 `;
 
