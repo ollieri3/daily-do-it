@@ -7,8 +7,11 @@ import pg from "pg";
 import { Strategy as LocalStrategy } from "passport-local";
 import passport from "passport";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 
 import { notFound } from "./lib/handlers.js";
+
+const pgSession = connectPgSimple(session);
 
 const pool = new pg.Pool({
   user: "postgres",
@@ -36,6 +39,10 @@ app.set("views", fileURLToPath( new URL('.', import.meta.url) + 'views'));
 app.use(express.urlencoded());
 
 app.use(session({
+  store: new pgSession({
+    pool,
+    createTableIfMissing: true
+  }),
   secret: "supersecret", // change this before deployment
   resave: false,
   saveUninitialized: false,
