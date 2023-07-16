@@ -1,0 +1,10 @@
+<h1>Hello, {{username}}</h1>
+
+{{#if username}}
+  <form action="/signout" method="post">
+    <button type="submit">Sign Out</button>
+  </form>
+
+{{else}}
+  <a href="/signin">Sign In</a>
+{{/if}}

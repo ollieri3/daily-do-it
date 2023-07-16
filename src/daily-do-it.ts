@@ -6,6 +6,7 @@ import { randomBytes, pbkdf2, timingSafeEqual } from "crypto";
 import pg from "pg";
 import { Strategy as LocalStrategy } from "passport-local";
 import passport from "passport";
+import session from "express-session";
 
 import { notFound } from "./lib/handlers.js";
 
@@ -34,14 +35,19 @@ app.set("views", fileURLToPath( new URL('.', import.meta.url) + 'views'));
 // Enable reading of URL Encoded Requst bodies
 app.use(express.urlencoded());
 
-
-
+app.use(session({
+  secret: "supersecret", // change this before deployment
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // TODO: Set this to False when deployed
+    sameSite: true
+  }
+}));
+app.use(passport.authenticate('session'));
 
 // Passport Setup
-
 passport.use('local', new LocalStrategy( async function verify(email, password, cb) {
-  console.log("Verify called", email, password);
-
   const { rows } = await pool.query(`SELECT email, salt, hashed_password FROM users WHERE email = $1`, [email]);
   const row = rows[0];
 
@@ -59,14 +65,26 @@ passport.use('local', new LocalStrategy( async function verify(email, password, 
     }
     return cb(null, row);
   });
-
 }));
 
+passport.serializeUser((user: any, cb) => {
+  process.nextTick(() => {
+    return cb(null, { id: "todo", email: user.email });
+  })
+});
+
+passport.deserializeUser((user: any, cb) => {
+  process.nextTick(() => {
+    return cb(null, user);
+  })
+})
 
 // Routes
-app.get("/", (_, res) => {
-  res.contentType("text/plain");
-  res.send("Hello World");
+
+app.get("/", (req, res) => {
+  res.render("home", {
+    username: (req.user as any)?.email
+  })
 })
 
 app.get("/signin", (req, res) => {
@@ -74,7 +92,7 @@ app.get("/signin", (req, res) => {
 });
 
 app.post('/signin', passport.authenticate('local', {
-  session: false, // Swap this out once session support in place
+  session: true,
   successRedirect: "/",
   failureRedirect: "/signin"
 }));
@@ -100,10 +118,16 @@ app.post("/signup", (req, res, next) => {
     }
     res.redirect("/");
   });
-
-
 });
 
+app.post("/signout", (req, res, next) => {
+  req.logout((err) => {
+    if(err) return next(err);
+    res.redirect("/");
+  })
+});
+
+// 404 Not Found Route
 app.use(notFound);
 
 app.listen(port, () => console.log(
