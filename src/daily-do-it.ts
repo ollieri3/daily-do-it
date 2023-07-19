@@ -100,7 +100,7 @@ app.get("/signin", (req, res) => {
 
 app.post('/signin', passport.authenticate('local', {
   session: true,
-  successRedirect: "/",
+  successRedirect: "/calendar",
   failureRedirect: "/signin"
 }));
 
@@ -132,6 +132,20 @@ app.post("/signout", (req, res, next) => {
     if(err) return next(err);
     res.redirect("/");
   })
+});
+
+
+// Calendar Routes
+
+app.get("/calendar/:year", (req, res) => {
+  console.log("params", req.params.year);
+  res.contentType("text/html");
+  res.send("Calendar for " + req.params.year);
+})
+
+
+app.get("/calendar", (req, res) => {
+  res.redirect(`/calendar/${new Date().getFullYear()}`);
 });
 
 // 404 Not Found Route
