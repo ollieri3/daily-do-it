@@ -8,6 +8,10 @@ import { Strategy as LocalStrategy } from "passport-local";
 import passport from "passport";
 import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
+import dayjs from "dayjs";
+import localeData from "dayjs/plugin/localeData.js";
+
+dayjs.extend(localeData);
 
 import { notFound } from "./lib/handlers.js";
 
@@ -95,6 +99,9 @@ app.get("/", (req, res) => {
 })
 
 app.get("/signin", (req, res) => {
+  if(req.user) {
+    res.redirect("/");
+  }
   res.render("signin");
 });
 
@@ -134,15 +141,17 @@ app.post("/signout", (req, res, next) => {
   })
 });
 
-
 // Calendar Routes
-
 app.get("/calendar/:year", (req, res) => {
-  console.log("params", req.params.year);
-  res.contentType("text/html");
-  res.send("Calendar for " + req.params.year);
+  const months = dayjs.monthsShort().map((month, index) => {
+    const numberOfDays = dayjs(new Date(+req.params.year, index)).daysInMonth();
+    return {
+      month,
+      days: [...Array(numberOfDays).keys()].map(i => i + 1)
+    };
+  });
+  res.render("calendar", { months });
 })
-
 
 app.get("/calendar", (req, res) => {
   res.redirect(`/calendar/${new Date().getFullYear()}`);

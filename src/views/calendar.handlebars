@@ -1,0 +1,12 @@
+<div style="display: grid; grid-template-columns: repeat(12, [col-start] 1fr); justify-content: center;">
+  {{#months}}
+    <div id="month">
+      <div id="month-name">{{month}}</div>
+      <div id="days">
+        {{#days}}
+          <div>{{.}}</div>
+        {{/days}}
+      </div>
+    </div>
+  {{/months}}
+</div>

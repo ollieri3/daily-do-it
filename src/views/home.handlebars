@@ -1,6 +1,7 @@
 <h1>Hello, {{username}}</h1>
 
 {{#if username}}
+  <a href="/calendar">Your Calendar</a>
   <form action="/signout" method="post">
     <button type="submit">Sign Out</button>
   </form>
