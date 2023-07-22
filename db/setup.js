@@ -19,6 +19,15 @@ const createScript = `
     hashed_password varchar(255) NOT NULL,
     salt varchar(255) NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS days (
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id INT NOT NULL,
+    date DATE NOT NULL,
+    CONSTRAINT fk_user
+      FOREIGN KEY(user_id)
+        REFERENCES users(id)
+  )
 `;
 
 client.connect().then(async () => {

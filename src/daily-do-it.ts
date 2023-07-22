@@ -144,10 +144,14 @@ app.post("/signout", (req, res, next) => {
 // Calendar Routes
 app.get("/calendar/:year", (req, res) => {
   const months = dayjs.monthsShort().map((month, index) => {
-    const numberOfDays = dayjs(new Date(+req.params.year, index)).daysInMonth();
+    const monthDate = dayjs(new Date(+req.params.year, index));
+    const numberOfDays = monthDate.daysInMonth();
     return {
       month,
-      days: [...Array(numberOfDays).keys()].map(i => i + 1)
+      days: [...Array(numberOfDays).keys()].map(i =>({
+        day: i + 1,
+        date: monthDate.date(i + 1).format("YYYY-MM-DD")
+      }))
     };
   });
   res.render("calendar", { months });
