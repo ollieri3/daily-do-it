@@ -1,12 +1,21 @@
-<div style="display: grid; grid-template-columns: repeat(12, [col-start] 1fr); justify-content: center;">
+<div id="calendar" style="display: grid; grid-template-columns: repeat(12, [col-start] 1fr); justify-content: center;">
   {{#months}}
     <div id="month">
       <div id="month-name">{{month}}</div>
       <div id="days">
         {{#days}}
-          <button data-date="{{date}}">{{day}}</button>
+          <button id="day" data-date="{{date}}">{{day}}</button>
         {{/days}}
       </div>
     </div>
   {{/months}}
 </div>
+
+<script>
+  console.log("hi");
+  document.getElementById("calendar").addEventListener("click", (ev) => {
+    if(event.target.id === "day") {
+      console.log("Day clicked", event.target.getAttribute("data-date"));
+    }
+  });
+</script>
