@@ -59,7 +59,7 @@ app.use(passport.authenticate('session'));
 
 // Passport Setup
 passport.use('local', new LocalStrategy( async function verify(email, password, cb) {
-  const { rows } = await pool.query(`SELECT email, salt, hashed_password FROM users WHERE email = $1`, [email]);
+  const { rows } = await pool.query(`SELECT id, email, salt, hashed_password FROM users WHERE email = $1`, [email]);
   const row = rows[0];
 
   if (!row) {
@@ -80,7 +80,7 @@ passport.use('local', new LocalStrategy( async function verify(email, password, 
 
 passport.serializeUser((user: any, cb) => {
   process.nextTick(() => {
-    return cb(null, { id: "todo", email: user.email });
+    return cb(null, { id: user.id, email: user.email });
   })
 });
 
