@@ -10,6 +10,7 @@ import session from "express-session";
 import connectPgSimple from "connect-pg-simple";
 import dayjs from "dayjs";
 import localeData from "dayjs/plugin/localeData.js";
+import bodyParser from 'body-parser';
 
 dayjs.extend(localeData);
 
@@ -39,8 +40,8 @@ app.set("view engine", "handlebars");
 
 app.set("views", fileURLToPath( new URL('.', import.meta.url) + 'views'));
 
-// Enable reading of URL Encoded Requst bodies
-app.use(express.urlencoded());
+// Enable reading of URL Encoded Request bodies
+app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(session({
   store: new pgSession({
@@ -56,6 +57,9 @@ app.use(session({
   }
 }));
 app.use(passport.authenticate('session'));
+
+// Link json parser middleware to parse json body
+app.use(bodyParser.json());
 
 // Passport Setup
 passport.use('local', new LocalStrategy( async function verify(email, password, cb) {
@@ -142,6 +146,42 @@ app.post("/signout", (req, res, next) => {
 });
 
 // Calendar Routes
+
+app.post("/day", async (req, res) => {
+  console.log("user", req.user);
+  console.log("body", req.body);
+
+  // TODO: Setup some zod input validation here.
+
+  if(dayjs(req.body.date).isValid() === false) {
+    res.statusCode = 422;
+    res.send({success: false, message: "Invalid date format provided for 'day'"});
+    return;
+  }
+
+  // First check if an entry already exists on that day
+  const existingEntryRows = await pool.query(`
+    SELECT id FROM days WHERE date = $1 AND user_id = $2
+  `, [req.body.date, (req.user as any).id]);
+
+  if(existingEntryRows.rows.length > 0) {
+    res.statusCode = 500;
+    res.send({success: false, message: "Date entry already exists"});
+    return
+  }
+  
+  console.log('existingEntryRows: ', existingEntryRows);
+
+  // Insert it
+  const rows = await pool.query(`
+    INSERT INTO days (user_id, date) VALUES ($1, $2)
+  ` , [(req.user as any).id, req.body.date]);
+
+  console.log('rows: ', rows);
+
+  res.json({success: true});
+});
+
 app.get("/calendar/:year", (req, res) => {
   const months = dayjs.monthsShort().map((month, index) => {
     const monthDate = dayjs(new Date(+req.params.year, index));

@@ -14,8 +14,19 @@
 <script>
   console.log("hi");
   document.getElementById("calendar").addEventListener("click", (ev) => {
-    if(event.target.id === "day") {
-      console.log("Day clicked", event.target.getAttribute("data-date"));
-    }
-  });
+    if(event.target.id !== "day") return;
+
+    console.log("Day clicked", event.target.getAttribute("data-date"));
+
+    fetch("/day", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        date: event.target.getAttribute("data-date")
+      })
+    })
+
+  }); 
 </script>
