@@ -4,7 +4,7 @@
       <div id="month-name">{{month}}</div>
       <div id="days">
         {{#days}}
-          <button id="day" data-date="{{date}}">{{day}}</button>
+          <button id="day" {{#if isComplete}} class="complete"{{/if}} data-date="{{date}}" data-is-complete="{{isComplete}}">{{day}}</button>
         {{/days}}
       </div>
     </div>
@@ -13,20 +13,48 @@
 
 <script>
   console.log("hi");
-  document.getElementById("calendar").addEventListener("click", (ev) => {
+  document.getElementById("calendar").addEventListener("click", async (ev) => {
     if(event.target.id !== "day") return;
 
-    console.log("Day clicked", event.target.getAttribute("data-date"));
+    const btn = event.target
 
-    fetch("/day", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        date: event.target.getAttribute("data-date")
-      })
-    })
+    console.log("Day clicked", event.target.getAttribute("data-date"));
+    console.log('atte', btn.getAttribute('data-is-complete'));
+
+    if(btn.getAttribute('data-is-complete') === "true" ) {
+      try {
+        const result = await fetch("/day", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            date: event.target.getAttribute("data-date")
+          })
+        })
+        btn.setAttribute("data-is-complete", false);
+        btn.classList.remove("complete");
+      } catch(err) {
+        console.error(err);
+      }
+    } else {
+      try {
+        const result = await fetch("/day", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            date: event.target.getAttribute("data-date")
+          })
+        })
+        btn.setAttribute("data-is-complete", true);
+        btn.classList.add("complete");
+      } catch(err) {
+        console.error(err);
+      }
+
+    }
 
   }); 
 </script>

@@ -182,16 +182,49 @@ app.post("/day", async (req, res) => {
   res.json({success: true});
 });
 
-app.get("/calendar/:year", (req, res) => {
+app.delete("/day", async (req, res) => {
+
+  // TODO: Extract and share this
+  if(dayjs(req.body.date).isValid() === false) {
+    res.statusCode = 422;
+    res.send({success: false, message: "Invalid date format provided for 'day'"});
+    return;
+  }
+
+  const existingEntryRows = await pool.query(`
+    DELETE FROM days WHERE date = $1 AND user_id = $2
+  `, [req.body.date, (req.user as any).id]);
+
+  if(existingEntryRows.rows.length > 0) {
+    res.json({success: true, message: "Day removed"});
+    return
+  }
+
+  res.json({success: false})
+  return;
+})
+
+app.get("/calendar/:year", async (req, res) => {
+
+  // TODO: Add authentication/redirect middleware for pages that require authentication
+
+  // Query all days in year for current user
+  const { rows: userDays } = await pool.query(`SELECT id, date FROM days WHERE user_id = $1`, [
+    (req.user as any).id
+  ]);
+
   const months = dayjs.monthsShort().map((month, index) => {
     const monthDate = dayjs(new Date(+req.params.year, index));
     const numberOfDays = monthDate.daysInMonth();
     return {
       month,
-      days: [...Array(numberOfDays).keys()].map(i =>({
-        day: i + 1,
-        date: monthDate.date(i + 1).format("YYYY-MM-DD")
-      }))
+      days: [...Array(numberOfDays).keys()].map(i => {
+        return {
+          day: i + 1,
+          date: monthDate.date(i + 1).format("YYYY-MM-DD"),
+          isComplete: userDays.some(day => dayjs(day.date).isSame(monthDate.date(i + 1)))
+        }
+      })
     };
   });
   res.render("calendar", { months });
