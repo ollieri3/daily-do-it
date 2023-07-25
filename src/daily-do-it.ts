@@ -169,15 +169,11 @@ app.post("/day", async (req, res) => {
     res.send({success: false, message: "Date entry already exists"});
     return
   }
-  
-  console.log('existingEntryRows: ', existingEntryRows);
 
   // Insert it
   const rows = await pool.query(`
     INSERT INTO days (user_id, date) VALUES ($1, $2)
   ` , [(req.user as any).id, req.body.date]);
-
-  console.log('rows: ', rows);
 
   res.json({success: true});
 });

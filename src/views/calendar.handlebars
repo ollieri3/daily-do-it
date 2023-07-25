@@ -1,10 +1,38 @@
+<style>
+
+  body {
+    color: rgb(193,183,167);	
+    background: rgb(26, 25, 25);
+  }
+
+  #days {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .day {
+    width: 50px;
+    margin: 5px;
+    height: calc(50px * 1.1547);
+    background-color: rgb(194, 139, 38);
+    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+    border: none;
+  }
+  
+  .day.complete {
+    background: hotpink;
+  }
+
+</style>
+
+
 <div id="calendar" style="display: grid; grid-template-columns: repeat(12, [col-start] 1fr); justify-content: center;">
   {{#months}}
     <div id="month">
       <div id="month-name">{{month}}</div>
       <div id="days">
         {{#days}}
-          <button id="day" {{#if isComplete}} class="complete"{{/if}} data-date="{{date}}" data-is-complete="{{isComplete}}">{{day}}</button>
+          <button id="day" class="day {{#if isComplete}}complete{{/if}}" data-date="{{date}}" data-is-complete="{{isComplete}}">{{day}}</button>
         {{/days}}
       </div>
     </div>
@@ -12,49 +40,50 @@
 </div>
 
 <script>
-  console.log("hi");
   document.getElementById("calendar").addEventListener("click", async (ev) => {
     if(event.target.id !== "day") return;
-
     const btn = event.target
-
-    console.log("Day clicked", event.target.getAttribute("data-date"));
-    console.log('atte', btn.getAttribute('data-is-complete'));
-
-    if(btn.getAttribute('data-is-complete') === "true" ) {
-      try {
-        const result = await fetch("/day", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            date: event.target.getAttribute("data-date")
-          })
-        })
-        btn.setAttribute("data-is-complete", false);
-        btn.classList.remove("complete");
-      } catch(err) {
-        console.error(err);
-      }
+    const isDayComplete = btn.getAttribute('data-is-complete') === "true";
+    if(isDayComplete) {
+      deleteDay(btn.getAttribute("data-date"));
     } else {
-      try {
-        const result = await fetch("/day", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            date: event.target.getAttribute("data-date")
-          })
-        })
-        btn.setAttribute("data-is-complete", true);
-        btn.classList.add("complete");
-      } catch(err) {
-        console.error(err);
-      }
-
+      submitDay(btn.getAttribute("data-date"))
     }
+  });
 
-  }); 
+  function submitDay(day) {
+    try {
+      const result = await fetch("/day", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          date: event.target.getAttribute("data-date")
+        })
+      })
+      btn.setAttribute("data-is-complete", false);
+      btn.classList.remove("complete");
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
+  function deleteDay(day) {
+    try {
+      const result = await fetch("/day", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          date: event.target.getAttribute("data-date")
+        })
+      })
+      btn.setAttribute("data-is-complete", true);
+      btn.classList.add("complete");
+    } catch(err) {
+      console.error(err);
+    }
+  } 
 </script>
