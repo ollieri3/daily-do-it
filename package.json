@@ -9,7 +9,8 @@
     "build": "npx tsc",
     "prebuild": "npm run clean && npm run copy-files",
     "clean": "rm -rf dist",
-    "copy-files": "copyfiles -u 1 src/views/**/* src/views/*.* dist/"
+    "copy-files": "copyfiles -u 1 src/views/**/* src/views/*.*",
+    "tailwind:watch": "tailwindcss -i ./src/public/main.css -o ./dist/public/main.css --watch"
   },
   "author": "Oliver Ridsdale",
   "license": "ISC",
@@ -38,6 +39,7 @@
     "copyfiles": "^2.4.1",
     "nodemon": "^2.0.22",
     "portfinder": "^1.0.32",
+    "tailwindcss": "^3.3.3",
     "typescript": "^5.1.3"
   }
 }

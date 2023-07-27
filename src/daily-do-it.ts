@@ -94,8 +94,10 @@ passport.deserializeUser((user: any, cb) => {
   })
 })
 
-// Routes
+// Static files
+app.use(express.static(fileURLToPath( new URL('.', import.meta.url) + 'public')));
 
+// Routes
 app.get("/", (req, res) => {
   res.render("home", {
     username: (req.user as any)?.email
