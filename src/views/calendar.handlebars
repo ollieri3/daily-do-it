@@ -5,15 +5,23 @@
     background: rgb(26, 25, 25);
   }
 
+  #calendar {
+    display: grid;
+    grid-template-columns: repeat(4, [col-start] 1fr);
+    justify-content: center;
+    gap: 25px;
+    margin: 1rem;
+  }
+
   #days {
-    display: flex;
-    flex-direction: column;
+    {{!-- display: flex;
+    flex-direction: column; --}}
   }
 
   .day {
-    width: 50px;
+    width: 30px;
     margin: 5px;
-    height: calc(50px * 1.1547);
+    height: calc(30px * 1.1547);
     background-color: rgb(194, 139, 38);
     clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
     border: none;
@@ -26,7 +34,7 @@
 </style>
 
 
-<div id="calendar" style="display: grid; grid-template-columns: repeat(12, [col-start] 1fr); justify-content: center;">
+<div id="calendar">
   {{#months}}
     <div id="month">
       <div id="month-name">{{month}}</div>
@@ -46,30 +54,16 @@
     const isDayComplete = btn.getAttribute('data-is-complete') === "true";
     if(isDayComplete) {
       deleteDay(btn.getAttribute("data-date"));
+      btn.setAttribute("data-is-complete", false);
+      btn.classList.remove("complete");
     } else {
       submitDay(btn.getAttribute("data-date"))
+      btn.setAttribute("data-is-complete", true);
+      btn.classList.add("complete");
     }
   });
 
-  function submitDay(day) {
-    try {
-      const result = await fetch("/day", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          date: event.target.getAttribute("data-date")
-        })
-      })
-      btn.setAttribute("data-is-complete", false);
-      btn.classList.remove("complete");
-    } catch(err) {
-      console.error(err);
-    }
-  }
-
-  function deleteDay(day) {
+  async function submitDay(day) {
     try {
       const result = await fetch("/day", {
         method: "POST",
@@ -80,8 +74,22 @@
           date: event.target.getAttribute("data-date")
         })
       })
-      btn.setAttribute("data-is-complete", true);
-      btn.classList.add("complete");
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
+  async function deleteDay(day) {
+    try {
+      const result = await fetch("/day", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          date: event.target.getAttribute("data-date")
+        })
+      })
     } catch(err) {
       console.error(err);
     }

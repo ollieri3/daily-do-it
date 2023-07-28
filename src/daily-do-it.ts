@@ -40,6 +40,9 @@ app.set("view engine", "handlebars");
 
 app.set("views", fileURLToPath( new URL('.', import.meta.url) + 'views'));
 
+// Static files
+app.use(express.static(fileURLToPath( new URL('.', import.meta.url) + 'public')));
+
 // Enable reading of URL Encoded Request bodies
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -93,9 +96,6 @@ passport.deserializeUser((user: any, cb) => {
     return cb(null, user);
   })
 })
-
-// Static files
-app.use(express.static(fileURLToPath( new URL('.', import.meta.url) + 'public')));
 
 // Routes
 app.get("/", (req, res) => {
