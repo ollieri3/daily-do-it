@@ -1,10 +1,4 @@
 <style>
-
-  body {
-    color: rgb(193,183,167);	
-    background: rgb(26, 25, 25);
-  }
-
   #calendar {
     display: grid;
     grid-template-columns: repeat(4, [col-start] 1fr);
@@ -13,24 +7,17 @@
     margin: 1rem;
   }
 
-  #days {
-    {{!-- display: flex;
-    flex-direction: column; --}}
-  }
-
   .day {
     width: 30px;
     margin: 5px;
     height: calc(30px * 1.1547);
-    background-color: rgb(194, 139, 38);
     clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
     border: none;
   }
   
   .day.complete {
-    background: hotpink;
+    background: rgb(180, 177, 177);
   }
-
 </style>
 
 
@@ -40,7 +27,7 @@
       <div id="month-name">{{month}}</div>
       <div id="days">
         {{#days}}
-          <button id="day" class="day {{#if isComplete}}complete{{/if}}" data-date="{{date}}" data-is-complete="{{isComplete}}">{{day}}</button>
+          <button id="day" class="day bg-gray-200 {{#if isComplete}}complete{{/if}}" data-date="{{date}}" data-is-complete="{{isComplete}}">{{day}}</button>
         {{/days}}
       </div>
     </div>
