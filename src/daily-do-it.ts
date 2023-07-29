@@ -97,8 +97,18 @@ passport.deserializeUser((user: any, cb) => {
   })
 })
 
+// Provide user to all templates
+app.use((req, res, next) => {
+  if(req.user) res.locals.user = req.user;
+  next();
+});
+
 // Routes
 app.get("/", (req, res) => {
+  if(req.user) {
+    res.redirect("/calendar");
+    return;
+  }  
   res.render("home", {
     username: (req.user as any)?.email
   })

@@ -9,7 +9,14 @@
 
   <header class="px-5 py-3 w-full border-b flex items-center justify-between">
     <a href="/" class="w-12 inline-block font-medium text-xl">Daily Do It.</a>
-    <a href="/signin">Sign In</a>
+
+    {{#if user}}
+      <form action="/signout" method="post">
+        <button type="submit">Sign Out</button>
+      </form>
+    {{else}}
+      <a href="/signin">Sign In</a>
+    {{/if}}
   </header>
 
   <body>
