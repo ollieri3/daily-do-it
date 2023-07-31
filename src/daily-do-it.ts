@@ -160,9 +160,6 @@ app.post("/signout", (req, res, next) => {
 // Calendar Routes
 
 app.post("/day", async (req, res) => {
-  console.log("user", req.user);
-  console.log("body", req.body);
-
   // TODO: Setup some zod input validation here.
 
   if(dayjs(req.body.date).isValid() === false) {
