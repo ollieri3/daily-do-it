@@ -10,13 +10,17 @@
   <header class="px-5 py-3 w-full border-b flex items-center justify-between">
     <a href="/" class="w-12 inline-block font-medium text-xl">Daily Do It.</a>
 
-    {{#if user}}
-      <form action="/signout" method="post">
-        <button type="submit">Sign Out</button>
-      </form>
-    {{else}}
-      <a href="/signin">Sign In</a>
-    {{/if}}
+    <nav class="flex gap-8 items-center"> 
+      {{#if user}}
+        <form action="/signout" method="post">
+          <button type="submit">Sign Out</button>
+        </form>
+      {{else}}
+        <a href="/signup" class="bg-gray-200 rounded-md py-1 px-2">Sign Up</a>
+        <a href="/signin">Sign In</a>
+      {{/if}}
+    </nav>
+
   </header>
 
   <body>
