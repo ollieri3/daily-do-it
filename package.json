@@ -40,6 +40,7 @@
     "copyfiles": "^2.4.1",
     "nodemon": "^2.0.22",
     "portfinder": "^1.0.32",
+    "prettier": "3.0.0",
     "typescript": "^5.1.3"
   }
 }

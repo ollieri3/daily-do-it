@@ -1,16 +1,15 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <title>Daily Do It</title>    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/main.css">
+    <title>Daily Do It</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/main.css" />
   </head>
 
   <header class="px-5 py-3 w-full border-b flex items-center justify-between">
     <a href="/" class="w-12 inline-block font-medium text-xl">Daily Do It.</a>
 
-    <nav class="flex gap-8 items-center"> 
+    <nav class="flex gap-8 items-center">
       {{#if user}}
         <form action="/signout" method="post">
           <button type="submit">Sign Out</button>

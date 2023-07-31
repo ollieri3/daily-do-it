@@ -6,16 +6,36 @@
 
     <form action="/signup" method="post" class="flex flex-col gap-5">
       <section>
-          <label for="email" class="block mb-1" autofocus>Email</label>
-          <input id="email" class="block border rounded-md p-2 w-full" name="email" type="email" autocomplete="email" required autofocus placeholder="Enter your email">
+        <label for="email" class="block mb-1" autofocus>Email</label>
+        <input
+          id="email"
+          class="block border rounded-md p-2 w-full"
+          name="email"
+          type="email"
+          autocomplete="email"
+          required
+          autofocus
+          placeholder="Enter your email"
+        />
       </section>
       <section>
-          <label for="current-password" class="block mb-1">Password</label>
-          <input id="current-password" class="block border rounded-md p-2 w-full" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+        <label for="current-password" class="block mb-1">Password</label>
+        <input
+          id="current-password"
+          class="block border rounded-md p-2 w-full"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Enter your password"
+          required
+        />
       </section>
-      {{!-- TODO: Add Password confirmation --}}
+      {{! TODO: Add Password confirmation }}
 
-      <button type="submit" class="w-full p-2 rounded border bg-gray-200 mt-5">Sign up now</button>
+      <button
+        type="submit"
+        class="w-full p-2 rounded border bg-gray-200 mt-5"
+      >Sign up now</button>
     </form>
 
   </div>

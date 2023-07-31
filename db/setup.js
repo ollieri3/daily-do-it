@@ -9,7 +9,7 @@ const client = new pg.Client({
   host: "localhost",
   database: "dailydoit",
   password: "secret", // This will be changed before deployment
-  port: 5432
+  port: 5432,
 });
 
 const createScript = `
@@ -34,10 +34,10 @@ client.connect().then(async () => {
   try {
     console.log("Creating Database schema...");
     await client.query(createScript);
-    console.log("Database schema creation complete.")
+    console.log("Database schema creation complete.");
   } catch (err) {
     console.log(err);
   } finally {
     client.end();
   }
-})
+});

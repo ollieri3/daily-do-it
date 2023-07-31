@@ -1,6 +1,6 @@
 {
   "watch": ["dist/", ["src/views"]],
-  "ignore": [ "dist/views/"],
+  "ignore": ["dist/views/"],
   "events": {
     "restart": "npm run copy-files"
   },

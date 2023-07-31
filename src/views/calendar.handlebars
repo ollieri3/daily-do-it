@@ -1,3 +1,4 @@
+{{!-- prettier-ignore --}}
 <style>
   #calendar {
     display: grid;
@@ -20,20 +21,34 @@
   }
 </style>
 
-
 <div id="calendar">
   {{#months}}
     <div id="month">
       <div id="month-name">{{month}}</div>
       <div id="days">
         {{#days}}
-          <button id="day" class="day bg-gray-200 {{#if isComplete}}complete{{/if}}" data-date="{{date}}" data-is-complete="{{isComplete}}">{{day}}</button>
+          {{#if isComplete}}
+            <button
+              id="day"
+              class="day bg-gray-200 complete"
+              data-date="{{date}}"
+              data-is-complete="{{isComplete}}"
+            >{{day}}</button>
+          {{else}}
+            <button
+              id="day"
+              class="day bg-gray-200"
+              data-date="{{date}}"
+            >{{day}}</button>
+          {{/if}}
+
         {{/days}}
       </div>
     </div>
   {{/months}}
 </div>
 
+{{!-- prettier-ignore --}}
 <script>
   document.getElementById("calendar").addEventListener("click", async (ev) => {
     if(event.target.id !== "day") return;
