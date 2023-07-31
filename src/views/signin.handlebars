@@ -1,15 +1,15 @@
-<div class="flex mt-16">
+<div class="mt-16 flex">
 
-  <div class="m-auto rounded-md border p-10 max-w-lg w-2/3">
+  <div class="m-auto w-2/3 max-w-lg rounded-md border p-10">
 
-    <h1 class="text-3xl mb-10 text-center font-medium">Sign in to your account</h1>
+    <h1 class="mb-10 text-center text-3xl font-medium">Sign in to your account</h1>
 
     <form action="/signin" method="post" class="flex flex-col gap-5">
       <section>
-        <label for="email" class="block mb-1" autofocus>Email</label>
+        <label for="email" class="mb-1 block" autofocus>Email</label>
         <input
           id="email"
-          class="block border rounded-md p-2 w-full"
+          class="block w-full rounded-md border p-2"
           name="username"
           type="email"
           autocomplete="email"
@@ -19,10 +19,10 @@
         />
       </section>
       <section>
-        <label for="current-password" class="block mb-1">Password</label>
+        <label for="current-password" class="mb-1 block">Password</label>
         <input
           id="current-password"
-          class="block border rounded-md p-2 w-full"
+          class="block w-full rounded-md border p-2"
           name="password"
           type="password"
           autocomplete="current-password"
@@ -32,7 +32,7 @@
       </section>
       <button
         type="submit"
-        class="w-full p-2 rounded border bg-gray-200 mt-5"
+        class="mt-5 w-full rounded border bg-gray-200 p-2"
       >Sign in now</button>
     </form>
   </div>

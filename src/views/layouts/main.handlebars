@@ -6,16 +6,16 @@
     <link rel="stylesheet" href="/main.css" />
   </head>
 
-  <header class="px-5 py-3 w-full border-b flex items-center justify-between">
-    <a href="/" class="w-12 inline-block font-medium text-xl">Daily Do It.</a>
+  <header class="flex w-full items-center justify-between border-b px-5 py-3">
+    <a href="/" class="inline-block w-12 text-xl font-medium">Daily Do It.</a>
 
-    <nav class="flex gap-8 items-center">
+    <nav class="flex items-center gap-8">
       {{#if user}}
         <form action="/signout" method="post">
           <button type="submit">Sign Out</button>
         </form>
       {{else}}
-        <a href="/signup" class="bg-gray-200 rounded-md py-1 px-2">Sign Up</a>
+        <a href="/signup" class="rounded-md bg-gray-200 px-2 py-1">Sign Up</a>
         <a href="/signin">Sign In</a>
       {{/if}}
     </nav>

@@ -41,6 +41,7 @@
     "nodemon": "^2.0.22",
     "portfinder": "^1.0.32",
     "prettier": "3.0.0",
+    "prettier-plugin-tailwindcss": "^0.4.1",
     "typescript": "^5.1.3"
   }
 }
