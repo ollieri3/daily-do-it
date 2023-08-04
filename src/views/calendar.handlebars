@@ -50,6 +50,7 @@
 
 {{!-- prettier-ignore --}}
 <script>
+  const _csrf = document.querySelector("meta[name='csrf-token']").getAttribute("content");
   document.getElementById("calendar").addEventListener("click", async (ev) => {
     if(event.target.id !== "day") return;
     const btn = event.target
@@ -70,6 +71,7 @@
       const result = await fetch("/day", {
         method: "POST",
         headers: {
+          "x-csrf-token": _csrf,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -86,6 +88,7 @@
       const result = await fetch("/day", {
         method: "DELETE",
         headers: {
+          "x-csrf-token": _csrf,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({

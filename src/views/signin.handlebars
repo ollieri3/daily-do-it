@@ -5,6 +5,7 @@
     <h1 class="mb-10 text-center text-3xl font-medium">Sign in to your account</h1>
 
     <form action="/signin" method="post" class="flex flex-col gap-5">
+      <input type="hidden" name="_csrf" value="{{_csrfToken}}">
       <section>
         <label for="email" class="mb-1 block" autofocus>Email</label>
         <input

@@ -11,6 +11,9 @@ import connectPgSimple from "connect-pg-simple";
 import dayjs from "dayjs";
 import localeData from "dayjs/plugin/localeData.js";
 import bodyParser from "body-parser";
+import csrf from "csrf";
+
+const Tokens = new csrf();
 
 dayjs.extend(localeData);
 
@@ -61,7 +64,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // TODO: Set this to False when deployed
+      secure: false, // TODO: Set this to True when deployed
       sameSite: true,
     },
   }),
@@ -99,7 +102,8 @@ passport.use(
 );
 
 passport.serializeUser((user: any, cb) => {
-  process.nextTick(() => {
+  process.nextTick(async () => {
+    const secret = await Tokens.secret();
     return cb(null, { id: user.id, email: user.email });
   });
 });
@@ -115,6 +119,43 @@ app.use((req, res, next) => {
   if (req.user) res.locals.user = req.user;
   next();
 });
+
+// Generate CSRF token for session if necessary
+app.use((req, res, next) => {
+  const csrfSecret = Tokens.secretSync();
+  if(!(req.session as any).csrfSecret) {
+    (req.session as any).csrfSecret = csrfSecret;
+  }
+  if(!(req.session as any).csrfToken) {
+    (req.session as any).csrfToken = Tokens.create(csrfSecret);
+  }
+  console.log("Session", req.session);
+  res.locals._csrfToken = (req.session as any).csrfToken;
+  next();
+});
+
+// Validate any incoming csrf tokens
+app.use((req, res, next) => {
+  const ignoredMethods = ['GET', 'HEAD', 'OPTIONS'];
+  if(ignoredMethods.includes(req.method)) {
+    return next()
+  }
+
+  const clientToken = req.body._csrf || req.headers['x-csrf-token'];
+  if(!clientToken) {
+    res.status(403).send("No CSRF token provided");
+    return;
+  }
+  const userCsrfSecret = (req.session as any).csrfSecret;
+  if(!Tokens.verify(userCsrfSecret, clientToken)) {
+    res.status(403).send("Invalid csrf token");
+    return;
+  }
+  console.log('CSRF token verified');
+  // Continue as normal
+  next()
+})
+
 
 // Routes
 app.get("/", (req, res) => {
