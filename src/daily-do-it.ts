@@ -163,6 +163,7 @@ app.get("/", (req, res) => {
     res.redirect("/calendar");
     return;
   }
+  throw new Error("Not implemented");
   res.render("home", {
     username: (req.user as any)?.email,
   });
@@ -320,6 +321,13 @@ app.get("/calendar", (req, res) => {
 
 // 404 Not Found Route
 app.use(notFound);
+
+// Error middleware
+app.use((err, _req, res, _next) => {
+  console.error(err);
+  res.status(500);
+  res.render("error");
+});
 
 app.listen(port, () =>
   console.log(
