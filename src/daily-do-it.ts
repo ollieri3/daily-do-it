@@ -1,4 +1,4 @@
-import express from "express";
+import express, { ErrorRequestHandler } from "express";
 import { engine } from "express-handlebars";
 import { fileURLToPath } from "url";
 import { getPortPromise as getPort } from "portfinder";
@@ -13,20 +13,21 @@ import localeData from "dayjs/plugin/localeData.js";
 import bodyParser from "body-parser";
 import csrf from "csrf";
 
+import { ENV } from "./lib/environment.js";
+import { notFound } from "./lib/handlers.js";
+
 const Tokens = new csrf();
 
 dayjs.extend(localeData);
 
-import { notFound } from "./lib/handlers.js";
-
 const pgSession = connectPgSimple(session);
 
 const pool = new pg.Pool({
-  user: "postgres",
-  host: "localhost",
+  user: ENV.DB_USER,
+  host: ENV.DB_HOST,
   database: "dailydoit",
-  password: "secret", // This will be changed before deployment
-  port: 5432,
+  password: ENV.DB_PASSWORD, // This will be changed before deployment
+  port: ENV.DB_PORT,
 });
 
 const port = await getPort();
@@ -60,11 +61,11 @@ app.use(
       pool,
       createTableIfMissing: true,
     }),
-    secret: "supersecret", // change this before deployment
+    secret: ENV.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // TODO: Set this to True when deployed
+      secure: ENV.DEPLOYMENT === "prod",
       sameSite: true,
     },
   }),
@@ -123,39 +124,37 @@ app.use((req, res, next) => {
 // Generate CSRF token for session if necessary
 app.use((req, res, next) => {
   const csrfSecret = Tokens.secretSync();
-  if(!(req.session as any).csrfSecret) {
+  if (!(req.session as any).csrfSecret) {
     (req.session as any).csrfSecret = csrfSecret;
   }
-  if(!(req.session as any).csrfToken) {
+  if (!(req.session as any).csrfToken) {
     (req.session as any).csrfToken = Tokens.create(csrfSecret);
   }
-  console.log("Session", req.session);
   res.locals._csrfToken = (req.session as any).csrfToken;
   next();
 });
 
 // Validate any incoming csrf tokens
 app.use((req, res, next) => {
-  const ignoredMethods = ['GET', 'HEAD', 'OPTIONS'];
-  if(ignoredMethods.includes(req.method)) {
-    return next()
+  const ignoredMethods = ["GET", "HEAD", "OPTIONS"];
+  if (ignoredMethods.includes(req.method)) {
+    return next();
   }
 
-  const clientToken = req.body._csrf || req.headers['x-csrf-token'];
-  if(!clientToken) {
+  const clientToken = req.body._csrf || req.headers["x-csrf-token"];
+  if (!clientToken) {
     res.status(403).send("No CSRF token provided");
     return;
   }
   const userCsrfSecret = (req.session as any).csrfSecret;
-  if(!Tokens.verify(userCsrfSecret, clientToken)) {
+  if (!Tokens.verify(userCsrfSecret, clientToken)) {
     res.status(403).send("Invalid csrf token");
     return;
   }
-  console.log('CSRF token verified');
+  console.log("CSRF token verified");
   // Continue as normal
-  next()
-})
-
+  next();
+});
 
 // Routes
 app.get("/", (req, res) => {
@@ -321,13 +320,15 @@ app.get("/calendar", (req, res) => {
 // 404 Not Found Route
 app.use(notFound);
 
-// Error middleware
-app.use((err, _req, res, _next) => {
+const ErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err);
   // TODO: If development mode, show stack trace in view
   res.status(500);
   res.render("error");
-});
+};
+
+// Error middleware
+app.use(ErrorHandler);
 
 app.listen(port, () =>
   console.log(
