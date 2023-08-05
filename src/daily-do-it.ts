@@ -163,7 +163,6 @@ app.get("/", (req, res) => {
     res.redirect("/calendar");
     return;
   }
-  throw new Error("Not implemented");
   res.render("home", {
     username: (req.user as any)?.email,
   });
@@ -325,6 +324,7 @@ app.use(notFound);
 // Error middleware
 app.use((err, _req, res, _next) => {
   console.error(err);
+  // TODO: If development mode, show stack trace in view
   res.status(500);
   res.render("error");
 });
