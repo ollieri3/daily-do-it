@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import localeData from "dayjs/plugin/localeData.js";
 import bodyParser from "body-parser";
 import csrf from "csrf";
+import helmet from "helmet";
 
 import { ENV } from "./lib/environment.js";
 import { notFound } from "./lib/handlers.js";
@@ -38,13 +39,19 @@ const isAuthenticated: RequestHandler = (req, res, next) => {
 
 const app = express();
 
-// Don't tell clients that the server is powered by Express
-app.disable("x-powered-by");
+app.use(helmet());
 
 app.engine(
   "handlebars",
   engine({
     defaultLayout: "main",
+    helpers: {
+      section: function (name: string, options: any) {
+        if (!this._sections) this._sections = {};
+        (this._sections as any)[name] = options.fn(this);
+        return null;
+      },
+    },
   }),
 );
 app.set("view engine", "handlebars");
@@ -155,7 +162,6 @@ app.use((req, res, next) => {
     res.status(403).send("Invalid csrf token");
     return;
   }
-  console.log("CSRF token verified");
   // Continue as normal
   next();
 });

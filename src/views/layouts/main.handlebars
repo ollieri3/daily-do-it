@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{_csrfToken}}" />
     <link rel="stylesheet" href="/main.css" />
+    {{{_sections.head}}}
   </head>
 
   <header class="flex w-full items-center justify-between border-b px-5 py-3">
@@ -26,5 +27,6 @@
 
   <body>
     {{{body}}}
+    {{{_sections.scripts}}}
   </body>
 </html>
