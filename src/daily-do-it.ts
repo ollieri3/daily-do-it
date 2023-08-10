@@ -68,6 +68,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
   session({
+    name: "dailydoit.sid",
     store: new pgSession({
       pool,
       createTableIfMissing: true,
