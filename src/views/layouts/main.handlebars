@@ -3,7 +3,7 @@
     <title>Daily Do It</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="csrf-token" content="{{ _csrfToken }}">
+    <meta name="csrf-token" content="{{_csrfToken}}" />
     <link rel="stylesheet" href="/main.css" />
   </head>
 
@@ -12,8 +12,8 @@
 
     <nav class="flex items-center gap-8">
       {{#if user}}
-        <form action="/signout" method="post">
-          <input type="hidden" name="_csrf" value="{{_csrfToken}}">
+        <form action="/signout" method="post" class="mb-0">
+          <input type="hidden" name="_csrf" value="{{_csrfToken}}" />
           <button type="submit">Sign Out</button>
         </form>
       {{else}}

@@ -19,12 +19,31 @@
   .day.complete {
     background: rgb(180, 177, 177);
   }
+
+  @media screen and (max-width: 1000px) {
+    #calendar {
+      grid-template-columns: repeat(3, [col-start] 1fr);
+    }
+  }
+
+  @media screen and (max-width: 740px) {
+    #calendar {
+      grid-template-columns: repeat(2, [col-start] 1fr);
+    }
+  }
+
+    @media screen and (max-width: 500px) {
+    #calendar {
+      grid-template-columns: repeat(1, [col-start] 1fr);
+    }
+  }
+
 </style>
 
 <div id="calendar">
   {{#months}}
     <div id="month">
-      <div id="month-name">{{month}}</div>
+      <div id="month-name" class="ml-1 font-medium">{{month}}</div>
       <div id="days">
         {{#days}}
           {{#if isComplete}}
