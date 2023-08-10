@@ -1,4 +1,4 @@
-import express, { ErrorRequestHandler } from "express";
+import express, { ErrorRequestHandler, RequestHandler } from "express";
 import { engine } from "express-handlebars";
 import { fileURLToPath } from "url";
 import { getPortPromise as getPort } from "portfinder";
@@ -31,6 +31,10 @@ const pool = new pg.Pool({
 });
 
 const port = await getPort();
+
+const isAuthenticated: RequestHandler = (req, res, next) => {
+  return req.user ? next() : res.redirect("/signin");
+};
 
 const app = express();
 
@@ -212,7 +216,7 @@ app.post("/signup", (req, res, next) => {
   );
 });
 
-app.post("/signout", (req, res, next) => {
+app.post("/signout", isAuthenticated, (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
     res.redirect("/");
@@ -221,7 +225,7 @@ app.post("/signout", (req, res, next) => {
 
 // Calendar Routes
 
-app.post("/day", async (req, res) => {
+app.post("/day", isAuthenticated, async (req, res) => {
   // TODO: Setup some zod input validation here.
 
   if (dayjs(req.body.date).isValid() === false) {
@@ -258,7 +262,7 @@ app.post("/day", async (req, res) => {
   res.json({ success: true });
 });
 
-app.delete("/day", async (req, res) => {
+app.delete("/day", isAuthenticated, async (req, res) => {
   // TODO: Extract and share this
   if (dayjs(req.body.date).isValid() === false) {
     res.statusCode = 422;
@@ -285,7 +289,7 @@ app.delete("/day", async (req, res) => {
   return;
 });
 
-app.get("/calendar/:year", async (req, res) => {
+app.get("/calendar/:year", isAuthenticated, async (req, res) => {
   // TODO: Add authentication/redirect middleware for pages that require authentication
 
   // Query all days in year for current user
@@ -313,7 +317,7 @@ app.get("/calendar/:year", async (req, res) => {
   res.render("calendar", { months });
 });
 
-app.get("/calendar", (req, res) => {
+app.get("/calendar", isAuthenticated, (req, res) => {
   res.redirect(`/calendar/${new Date().getFullYear()}`);
 });
 
