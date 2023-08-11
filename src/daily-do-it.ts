@@ -204,9 +204,10 @@ app.post(
   }),
 );
 
-app.get("/signup", (req, res) => {
-  res.render("signup");
-});
+// TODO: Re-enable this later
+// app.get("/signup", (req, res) => {
+//   res.render("signup");
+// });
 
 app.post("/signup", (req, res, next) => {
   const salt = randomBytes(16);
