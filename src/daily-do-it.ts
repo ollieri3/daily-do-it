@@ -13,6 +13,7 @@ import localeData from "dayjs/plugin/localeData.js";
 import bodyParser from "body-parser";
 import csrf from "csrf";
 import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 import { ENV } from "./lib/environment.js";
 import { notFound } from "./lib/handlers.js";
@@ -185,8 +186,17 @@ app.get("/signin", (req, res) => {
   res.render("signin");
 });
 
+// Sign in Rate limiting
+const signInLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 app.post(
   "/signin",
+  signInLimiter,
   passport.authenticate("local", {
     session: true,
     successRedirect: "/calendar",
