@@ -9,7 +9,7 @@
     "build": "npx tsc",
     "prebuild": "npm run clean && npm run copy-files",
     "clean": "rm -rf dist",
-    "copy-files": "copyfiles -u 1 src/views/**/* src/views/*.* src/public/*.js dist/",
+    "copy-files": "copyfiles -u 1 src/views/**/* src/views/*.* src/public/*.png dist/",
     "tailwind:watch": "tailwindcss -i ./src/public/main.css -o ./dist/public/main.css --watch"
   },
   "author": "Oliver Ridsdale",
