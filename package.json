@@ -5,7 +5,7 @@
   "main": "dist/daily-do-it.js",
   "type": "module",
   "scripts": {
-    "start": "npm run build && concurrently --kill-others \"npx tsc --watch\" \"nodemon\" \"npm run tailwind:watch\"",
+    "start": "npm run build && concurrently --kill-others \"npx tsc --watch\" \"npx tsc --watch --project tsconfig.frontend.json  \" \"nodemon\" \"npm run tailwind:watch\"",
     "build": "npx tsc",
     "prebuild": "npm run clean && npm run copy-files",
     "clean": "rm -rf dist",

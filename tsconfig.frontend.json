@@ -1,0 +1,14 @@
+{
+  "include": [
+    "src/public/**/*"
+  ],
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "sourceMap": true,
+    "outDir": "dist/public",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  }
+}
