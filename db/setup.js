@@ -15,9 +15,11 @@ const client = new pg.Client({
 const createScript = `
   CREATE TABLE IF NOT EXISTS users (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    email varchar(200) NOT NULL,
-    hashed_password varchar(255) NOT NULL,
-    salt varchar(255) NOT NULL
+    email VARCHAR(200) NOT NULL,
+    hashed_password VARCHAR(255) NOT NULL,
+    salt VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_email UNIQUE (email)
   );
 
   CREATE TABLE IF NOT EXISTS days (
