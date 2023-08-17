@@ -14,6 +14,8 @@ import bodyParser from "body-parser";
 import csrf from "csrf";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import z from "zod";
+import validator from "validator";
 
 import { ENV } from "./lib/environment.js";
 import { notFound } from "./lib/handlers.js";
@@ -88,19 +90,46 @@ app.use(passport.authenticate("session"));
 // Link json parser middleware to parse json body
 app.use(bodyParser.json());
 
+const emailSchema = z
+  .string()
+  .min(1)
+  .max(254)
+  .refine((val) => validator.default.isEmail(val), {
+    message: "The email provided is not a valid email",
+  });
+
+const passwordSchema = z.string().min(1).max(100);
+
 // Passport Setup
 passport.use(
   "local",
   new LocalStrategy(async function verify(email, password, cb) {
+    // Input validations
+    const emailValidation = emailSchema.safeParse(email);
+    if (emailValidation.success === false) {
+      return cb(null, false, {
+        message: emailValidation.error.issues
+          .map((issue) => `${issue.message}\n`)
+          .join(),
+      });
+    }
+    const passwordValiation = passwordSchema.safeParse(password);
+    if (passwordValiation.success === false) {
+      return cb(null, false, {
+        message: passwordValiation.error.issues
+          .map((issue) => `${issue.message}\n`)
+          .join(),
+      });
+    }
+
     const { rows } = await pool.query(
       `SELECT id, email, salt, hashed_password FROM users WHERE email = $1`,
       [email],
     );
-    const row = rows[0];
 
+    const row = rows[0];
     if (!row) {
-      console.log("User doesn't exist");
-      return cb(null, false, { message: "Incorrect username or password." });
+      return cb(null, false, { message: "Incorrect email or password." });
     }
 
     const salt = Buffer.from(row.salt, "hex");
@@ -108,7 +137,7 @@ passport.use(
       if (err) return cb(err);
       const hash = Buffer.from(row.hashed_password, "hex");
       if (!timingSafeEqual(hash, derivedKey)) {
-        return cb(null, false, { message: "Incorrect username or password" });
+        return cb(null, false, { message: "Incorrect email or password" });
       }
       return cb(null, row);
     });
@@ -180,10 +209,14 @@ app.get("/", (req, res) => {
 });
 
 app.get("/signin", (req, res) => {
+  let errors;
+  if ("messages" in req.session && (req.session.messages as []).length > 0) {
+    errors = (req.session.messages as []).pop();
+  }
   if (req.user) {
     res.redirect("/");
   }
-  res.render("signin");
+  res.render("signin", { errors });
 });
 
 // Sign in Rate limiting
@@ -201,6 +234,7 @@ app.post(
     session: true,
     successRedirect: "/calendar",
     failureRedirect: "/signin",
+    failureMessage: true,
   }),
 );
 
