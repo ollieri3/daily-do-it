@@ -15,6 +15,9 @@
   },
   "author": "Oliver Ridsdale",
   "license": "ISC",
+  "engines": {
+    "node": "18.16.1"
+  },
   "volta": {
     "node": "18.16.1"
   },
