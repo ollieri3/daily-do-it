@@ -92,6 +92,7 @@ app.use(bodyParser.json());
 
 const emailSchema = z
   .string()
+  .trim()
   .min(1)
   .max(254)
   .refine((val) => validator.default.isEmail(val), {
