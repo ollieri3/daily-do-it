@@ -6,11 +6,12 @@
   "type": "module",
   "scripts": {
     "start": "npm run build && concurrently --kill-others \"npx tsc --watch\" \"npx tsc --watch --project tsconfig.frontend.json  \" \"nodemon\" \"npm run tailwind:watch\"",
-    "build": "npx tsc",
-    "prebuild": "npm run clean && npm run copy-files",
+    "build": "npm run copy-files && npm run tailwind && npx tsc && npx tsc --project tsconfig.frontend.json",
+    "prebuild": "npm run clean",
     "clean": "rm -rf dist",
     "copy-files": "copyfiles -u 1 src/views/**/* src/views/*.* src/public/*.png dist/",
-    "tailwind:watch": "tailwindcss -i ./src/public/main.css -o ./dist/public/main.css --watch"
+    "tailwind": "tailwindcss -i ./src/public/main.css -o ./dist/public/main.css",
+    "tailwind:watch": "npm run tailwind -- --watch"
   },
   "author": "Oliver Ridsdale",
   "license": "ISC",
