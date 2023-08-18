@@ -30,7 +30,7 @@ const pool = new pg.Pool({
   user: ENV.DB_USER,
   host: ENV.DB_HOST,
   database: "dailydoit",
-  password: ENV.DB_PASSWORD, // This will be changed before deployment
+  password: ENV.DB_PASSWORD,
   port: ENV.DB_PORT,
 });
 
@@ -72,6 +72,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
     name: "dailydoit.sid",
+    proxy: ENV.DEPLOYMENT === "prod" ? true : undefined,
     store: new pgSession({
       pool,
       createTableIfMissing: true,
