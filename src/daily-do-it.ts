@@ -19,6 +19,7 @@ import validator from "validator";
 
 import { ENV } from "./lib/environment.js";
 import { notFound } from "./lib/handlers.js";
+import { TRUSTED_IPS } from "./lib/proxy.js";
 
 const Tokens = new csrf();
 
@@ -43,7 +44,10 @@ const isAuthenticated: RequestHandler = (req, res, next) => {
 const app = express();
 
 if (ENV.DEPLOYMENT === "prod") {
-  app.set("trust proxy", true); // TODO: Narrow this to a list of cloudflare ips
+  app.set(
+    "trust proxy",
+    `loopback, linklocal, uniquelocal, ${TRUSTED_IPS.join(",")}`,
+  );
 }
 
 app.use(helmet());
