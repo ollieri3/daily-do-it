@@ -42,6 +42,10 @@ const isAuthenticated: RequestHandler = (req, res, next) => {
 
 const app = express();
 
+if (ENV.DEPLOYMENT === "prod") {
+  app.set("trust proxy", true); // TODO: Narrow this to a list of cloudflare ips
+}
+
 app.use(helmet());
 
 app.engine(
@@ -72,7 +76,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
     name: "dailydoit.sid",
-    proxy: ENV.DEPLOYMENT === "prod" ? true : undefined,
     store: new pgSession({
       pool,
       createTableIfMissing: true,
