@@ -1,4 +1,4 @@
-export const TRUSTED_IPS = [
+const TRUSTED_IPS = [
   // Cloudflare IPv4 IPS
   "103.21.244.0/22",
   "103.22.200.0/22",
@@ -25,3 +25,5 @@ export const TRUSTED_IPS = [
   "2c0f:f248::/32",
   "2606:4700::/32",
 ];
+
+export const TRUSTED_IPS_CSV = TRUSTED_IPS.join(",");

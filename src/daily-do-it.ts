@@ -19,7 +19,7 @@ import validator from "validator";
 
 import { ENV } from "./lib/environment.js";
 import { notFound } from "./lib/handlers.js";
-import { TRUSTED_IPS } from "./lib/proxy.js";
+import { TRUSTED_IPS_CSV } from "./lib/proxy.js";
 
 const Tokens = new csrf();
 
@@ -46,7 +46,7 @@ const app = express();
 if (ENV.DEPLOYMENT === "prod") {
   app.set(
     "trust proxy",
-    `loopback, linklocal, uniquelocal, ${TRUSTED_IPS.join(",")}`,
+    `loopback, linklocal, uniquelocal, ${TRUSTED_IPS_CSV}`,
   );
 }
 
