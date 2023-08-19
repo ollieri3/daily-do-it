@@ -223,7 +223,7 @@ app.get("/signin", (req, res) => {
     errors = (req.session.messages as []).pop();
   }
   if (req.user) {
-    res.redirect("/");
+    return res.redirect("/");
   }
   res.render("signin", { errors });
 });
@@ -272,7 +272,7 @@ app.post("/signup", (req, res, next) => {
       } catch (err) {
         return next(err);
       }
-      res.redirect("/");
+      return res.redirect("/");
     },
   );
 });
@@ -280,7 +280,7 @@ app.post("/signup", (req, res, next) => {
 app.post("/signout", isAuthenticated, (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
-    res.redirect("/");
+    return res.redirect("/");
   });
 });
 
@@ -379,7 +379,7 @@ app.get("/calendar/:year", isAuthenticated, async (req, res) => {
 });
 
 app.get("/calendar", isAuthenticated, (req, res) => {
-  res.redirect(`/calendar/${new Date().getFullYear()}`);
+  return res.redirect(`/calendar/${new Date().getFullYear()}`);
 });
 
 // 404 Not Found Route
