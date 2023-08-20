@@ -1,8 +1,8 @@
 {
-  "watch": ["dist/", ["src/views"]],
-  "ignore": ["dist/views/", "dist/public/"],
+  "watch": ["dist/", "src/views", "src/public"],
+  "ignore": ["dist/views/", "dist/public"],
   "events": {
     "restart": "npm run copy-files"
   },
-  "ext": "js,handlebars"
+  "ext": "js,handlebars,css"
 }

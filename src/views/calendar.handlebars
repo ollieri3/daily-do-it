@@ -1,44 +1,6 @@
-{{!-- prettier-ignore --}}
-<style>
-  #calendar {
-    display: grid;
-    grid-template-columns: repeat(4, [col-start] 1fr);
-    justify-content: center;
-    gap: 25px;
-    margin: 1rem;
-  }
-
-  .day {
-    width: 30px;
-    margin: 5px;
-    height: calc(30px * 1.1547);
-    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
-    border: none;
-  }
-  
-  .day.complete {
-    background: rgb(180, 177, 177);
-  }
-
-  @media screen and (max-width: 1000px) {
-    #calendar {
-      grid-template-columns: repeat(3, [col-start] 1fr);
-    }
-  }
-
-  @media screen and (max-width: 740px) {
-    #calendar {
-      grid-template-columns: repeat(2, [col-start] 1fr);
-    }
-  }
-
-    @media screen and (max-width: 500px) {
-    #calendar {
-      grid-template-columns: repeat(1, [col-start] 1fr);
-    }
-  }
-
-</style>
+{{#section "head"}}
+  <link rel="stylesheet" href="/calendar.css" />
+{{/section}}
 
 {{#section "scripts"}}
   <script src="/calendar.js"></script>

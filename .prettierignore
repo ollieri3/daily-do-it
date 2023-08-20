@@ -1,3 +1,6 @@
 db/data/*
 node_modules
 package-lock.json
+
+## There's a weird bug with handlebars templates where prettier will remove the DOCTYPE tag
+src/views/layouts/main.handlebars

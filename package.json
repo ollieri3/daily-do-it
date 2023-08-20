@@ -9,7 +9,7 @@
     "build": "npm run copy-files && npm run tailwind && npx tsc && npx tsc --project tsconfig.frontend.json",
     "prebuild": "npm run clean",
     "clean": "rm -rf dist",
-    "copy-files": "copyfiles -u 1 src/views/**/* src/views/*.* src/public/*.png dist/",
+    "copy-files": "copyfiles -u 1 src/views/**/* src/views/*.* src/public/*.png src/public/*.css dist/ -e src/public/main.css",
     "tailwind": "tailwindcss -i ./src/public/main.css -o ./dist/public/main.css",
     "tailwind:watch": "npm run tailwind -- --watch"
   },
