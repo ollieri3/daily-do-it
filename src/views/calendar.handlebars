@@ -9,7 +9,7 @@
 <div id="calendar">
   {{#months}}
     <div id="month">
-      <div id="month-name" class="ml-1 font-medium">{{month}}</div>
+      <div id="month-name" class="ml-1 font-bold">{{month}}</div>
       <div id="days">
         {{#days}}
           {{#if isComplete}}
@@ -18,6 +18,12 @@
               class="day complete"
               data-date="{{date}}"
               data-is-complete="{{isComplete}}"
+            >{{day}}</button>
+          {{else if isToday}}
+            <button
+              id="day"
+              class="day today"
+              data-date="{{date}}"
             >{{day}}</button>
           {{else}}
             <button id="day" class="day" data-date="{{date}}">{{day}}</button>

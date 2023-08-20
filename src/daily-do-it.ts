@@ -362,6 +362,7 @@ app.get("/calendar/:year", isAuthenticated, async (req, res) => {
   const months = dayjs.monthsShort().map((month, index) => {
     const monthDate = dayjs(new Date(+req.params.year, index));
     const numberOfDays = monthDate.daysInMonth();
+    const today = dayjs();
     return {
       month,
       days: [...Array(numberOfDays).keys()].map((i) => {
@@ -371,6 +372,7 @@ app.get("/calendar/:year", isAuthenticated, async (req, res) => {
           isComplete: userDays.some((day) =>
             dayjs(day.date).isSame(monthDate.date(i + 1)),
           ),
+          isToday: today.isSame(monthDate.date(i + 1), "day"),
         };
       }),
     };
