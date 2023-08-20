@@ -15,16 +15,12 @@
           {{#if isComplete}}
             <button
               id="day"
-              class="day complete bg-gray-200"
+              class="day complete"
               data-date="{{date}}"
               data-is-complete="{{isComplete}}"
             >{{day}}</button>
           {{else}}
-            <button
-              id="day"
-              class="day bg-gray-200"
-              data-date="{{date}}"
-            >{{day}}</button>
+            <button id="day" class="day" data-date="{{date}}">{{day}}</button>
           {{/if}}
 
         {{/days}}
