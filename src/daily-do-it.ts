@@ -166,9 +166,13 @@ passport.deserializeUser((user: any, cb) => {
   });
 });
 
-// Provide user to all templates
+// Provide values to all templates
 app.use((req, res, next) => {
   if (req.user) res.locals.user = req.user;
+
+  // Powers the dynamic favicons
+  const todaysDate = dayjs().get("date");
+  res.locals.todaysDate = todaysDate;
   next();
 });
 

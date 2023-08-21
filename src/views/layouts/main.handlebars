@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{_csrfToken}}" />
     <link rel="stylesheet" href="/main.css" />
+
+    {{!-- Favicons --}}
+    <link rel="icon" href="/favicon.ico" sizes="32x32">
+    <link rel="icon" href="/favicons/{{todaysDate}}-favicon.svg" type="image/svg+xml">
+    {{!-- TODO:  add apple-touch and manifest icons https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs --}}
     {{{_sections.head}}}
   </head>
 
