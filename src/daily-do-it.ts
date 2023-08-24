@@ -87,9 +87,11 @@ app.use(
     secret: ENV.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    rolling: true,
     cookie: {
       secure: ENV.DEPLOYMENT === "prod",
       sameSite: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     },
   }),
 );
