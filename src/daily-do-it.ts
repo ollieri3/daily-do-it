@@ -237,8 +237,7 @@ app.get("/", (req, res) => {
       }),
     };
   });
-  console.dir(months, { depth: null });
-  // console.log("daysCount: ", daysCount);
+
   res.render("home", {
     username: (req.user as any)?.email,
     months,
