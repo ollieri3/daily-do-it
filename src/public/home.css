@@ -1,0 +1,76 @@
+#calendar {
+  display: grid;
+  grid-template-columns: repeat(4, [col-start] 150px);
+  justify-content: center;
+  gap: 10px;
+  min-width: 600px;
+}
+
+:root {
+  --small-day-size: 17.5px;
+}
+
+.day {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transition: background 0.2s;
+  font-size: 8px;
+  width: var(--small-day-size);
+  height: calc(var(--small-day-size) * 1.1547);
+  clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+  border: none;
+  background: #cfcfcf;
+}
+
+.day.animate {
+  animation: animateInMain;
+  animation-duration: 300ms;
+  animation-delay: calc(var(--animation-order) * 5ms);
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+}
+
+.day.animate::before {
+  animation: animateInBorder;
+  animation-duration: 300ms;
+  animation-delay: calc(var(--animation-order) * 5ms);
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+}
+
+.day::before {
+  width: calc(var(--small-day-size) - 2.5px);
+  height: calc(calc(var(--small-day-size) - 2.5px) * 1.1547);
+  clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+  background: #efefef;
+  content: "";
+  position: absolute;
+  z-index: -1;
+}
+
+@keyframes animateInMain {
+  0% {
+    background: #cfcfcf;
+  }
+  100% {
+    background: gold;
+    color: gold;
+  }
+}
+
+@keyframes animateInBorder {
+  0% {
+    background: #efefef;
+  }
+  100% {
+    background: rgba(89, 58, 1, 0.986);
+  }
+}
+
+@media screen and (max-width: 650px) {  
+  .calendar-container {
+    display: none;
+  }
+}

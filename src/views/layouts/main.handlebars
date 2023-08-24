@@ -12,28 +12,32 @@
     <link rel="icon" href="/favicons/{{todaysDate}}-favicon.svg" type="image/svg+xml">
     {{!-- TODO:  add apple-touch and manifest icons https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs --}}
     {{{_sections.head}}}
+    {{{_sections.scripts}}}
   </head>
 
-  <header class="flex w-full items-center justify-between border-b px-5 py-3">
-    <a href="/" class="inline-block w-12 text-xl font-medium">Daily Do It.</a>
+  <header class="w-full border-b px-5 py-5">
+    <div class="flex items-center justify-between max-w-7xl m-auto">
+      
+      <a href="/" class="inline-block text-xl font-medium">Daily Do It.</a>
 
-    <nav class="flex items-center gap-8">
-      {{#if user}}
-        <form action="/signout" method="post" class="mb-0">
-          <input type="hidden" name="_csrf" value="{{_csrfToken}}" />
-          <button type="submit">Sign Out</button>
-        </form>
-      {{else}}
-        {{! TODO: Re-enable this later }}
-        {{! <a href="/signup" class="rounded-md bg-gray-200 px-2 py-1">Sign Up</a> }}
-        <a href="/signin">Sign In</a>
-      {{/if}}
-    </nav>
+      <nav class="flex items-center gap-8">
+        {{#if user}}
+          <form action="/signout" method="post" class="mb-0">
+            <input type="hidden" name="_csrf" value="{{_csrfToken}}" />
+            <button type="submit">Sign Out</button>
+          </form>
+        {{else}}
+          {{! TODO: Re-enable this later }}
+          {{! <a href="/signup" class="rounded-md bg-gray-200 px-2 py-1">Sign Up</a> }}
+          <a href="/signin">Sign In</a>
+        {{/if}}
+      </nav>
+
+    </div>
 
   </header>
 
   <body>
     {{{body}}}
-    {{{_sections.scripts}}}
   </body>
 </html>

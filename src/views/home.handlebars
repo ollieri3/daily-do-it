@@ -1,23 +1,59 @@
-<section class="m-8 mx-auto max-w-prose">
+{{#section "head"}}
+  <link rel="stylesheet" href="/home.css" />
+{{/section}}
 
-  <div class="text-center">
-    <h1 class="text-center text-5xl font-semibold" style="text-wrap: balance">
-      Visualize, track and commit to a habit
-      <span class="underline">daily</span>
-    </h1>
+<div class="flex flex-wrap max-w-7xl m-auto pt-20">
 
-    <p class="mt-4 text-center text-xl text-gray-500">
-      Daily Do It is a simple, free app that helps you visualize, track and
-      commit to a habit every day.
-    </p>
+  <section class="basis-2/5 grow">
 
-    <a
-      class="mt-4 inline-block border border-solid border-gray-400 p-4"
-      href="https://twitter.com/ORidsdale"
-    >Coming Soon...</a>
+    <div class="max-w-prose m-auto p-2">
+      <h1 class="text-5xl font-semibold" style="text-wrap: balance">
+        Visualize, track and commit to a habit
+        <span class="underline">daily</span>
+      </h1>
+
+      <p class="mt-4 text-xl text-gray-500">
+        Daily Do It is a simple, free app that helps you visualize, track and
+        commit to a habit every day.
+      </p>
+
+      <a
+        class="mt-4 inline-block border border-solid border-gray-400 p-4"
+        href="https://twitter.com/ORidsdale"
+      >Coming Soon...</a>
+    </div>
+  </section>
+
+  <div class="basis-3/5 grow calendar-container">
+
+      <div id="calendar">
+        {{#months}}
+          <div id="month">
+            <div id="month-name" class="text-xs font-bold">{{month}}</div>
+            <div id="days">
+              {{#days}}
+
+                {{#if isComplete}}
+                  <span
+                    id="day"
+                    style="--animation-order: {{animationOrder}}"
+                    class="day animate"
+                    data-date="{{date}}"
+                  >{{day}}</span>
+                {{else}}
+                  <span
+                    id="day"
+                    style="--animation-order: {{animationOrder}}"
+                    class="day"
+                    data-date="{{date}}"
+                  >{{day}}</span>
+                {{/if}}
+
+              {{/days}}
+            </div>
+          </div>
+        {{/months}}
+      </div>
   </div>
 
-  {{! TODO: Replace this }}
-  <img src="/calendar.png" class="mt-8" />
-
-</section>
+</div>
