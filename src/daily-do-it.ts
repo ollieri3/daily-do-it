@@ -39,6 +39,17 @@ if (ENV.DEPLOYMENT === "prod") {
 
 app.use(helmet());
 
+/**
+ * Temporarily disable any cacheing, this is to prevent
+ * outdated csrf tokens encoded in views from being cached by the browser
+ *
+ * TODO: Make this dynamic based on the request
+ */
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
 app.engine(
   "handlebars",
   engine({
@@ -144,7 +155,6 @@ passport.use(
 
 passport.serializeUser((user: any, cb) => {
   process.nextTick(async () => {
-    const secret = await Tokens.secret();
     return cb(null, { id: user.id, email: user.email });
   });
 });
