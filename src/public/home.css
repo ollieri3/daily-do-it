@@ -10,6 +10,10 @@
   --small-day-size: 17.5px;
 }
 
+.arrow-icon {
+  transform: scaleX(-1)
+}
+
 .day {
   display: inline-flex;
   align-items: center;

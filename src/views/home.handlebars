@@ -2,14 +2,11 @@
   <link rel="stylesheet" href="/home.css" />
 {{/section}}
 
-<div class="flex flex-wrap max-w-7xl m-auto pt-20">
+<div class="m-auto flex max-w-7xl flex-wrap pt-20">
 
-  <section class="basis-2/5 grow">
-
-    <div class="max-w-prose m-auto p-2">
-      <h1 class="text-5xl font-semibold" style="text-wrap: pretty">
-        Visualize, track and commit to a habit
-        <span class="underline">daily</span>
+  <section class="grow basis-2/5">
+    <div class="m-auto max-w-prose p-2">
+      <h1 class="text-5xl font-semibold">Track and commit to a habit daily
       </h1>
 
       <p class="mt-4 text-xl text-gray-500">
@@ -18,14 +15,14 @@
       </p>
 
       <a
-        class="mt-4 inline-block border border-solid border-gray-400 p-4"
-        href="https://twitter.com/ORidsdale"
-      >Coming Soon...</a>
+        class="mt-4 inline-block rounded border-gray-700 bg-emerald-700 px-4 py-3 text-white shadow-md transition-colors hover:bg-emerald-800"
+        href="/signup"
+      >Get started</a>
     </div>
   </section>
 
-  <div class="basis-3/5 grow calendar-container">
-
+  <div class="calendar-container grow basis-3/5">
+    <figure class="flex flex-col items-center">
       <div id="calendar">
         {{#months}}
           <div id="month">
@@ -54,6 +51,37 @@
           </div>
         {{/months}}
       </div>
+      <figcaption
+        class="mt-5 flex items-baseline gap-1 text-center text-sm text-gray-500"
+      >
+        <svg
+          class="arrow-icon inline-block fill-gray-500"
+          width="14px"
+          height="14px"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
+        ><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --><path
+            d="M32 448c-17.7 0-32 14.3-32 32s14.3 32 32 32l96 0c53 0 96-43 96-96l0-306.7 73.4 73.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 109.3 160 416c0 17.7-14.3 32-32 32l-96 0z"
+          /></svg>
+        What your year could look like.</figcaption>
+    </figure>
   </div>
 
 </div>
+
+<section class="mt-20 bg-emerald-100">
+  <div class="m-auto flex max-w-7xl justify-between py-10">
+    <img
+      class="rounded shadow-md"
+      src="/img/everday-calendar-simone-giertz.webp"
+      width="450"
+      height="450"
+    />
+    <div class="max-w-prose basis-3/5">
+      <h2 class="text-2 xl font-medium">Inspired by the Everyday Calendar</h2>
+      {{! TODO: Fill this out }}
+      <p></p>
+    </div>
+
+  </div>
+</section>
