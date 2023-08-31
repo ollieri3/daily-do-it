@@ -37,6 +37,8 @@ if (ENV.DEPLOYMENT === "prod") {
   );
 }
 
+app.use(helmet());
+
 /**
  * Temporarily disable any cacheing, this is to prevent
  * outdated csrf tokens encoded in views from being cached by the browser

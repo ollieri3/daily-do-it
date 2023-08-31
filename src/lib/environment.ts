@@ -17,6 +17,10 @@ const envSchema = z.object({
   DB_HOST: z.string(),
   DB_PORT: z.number(),
   SESSION_SECRET: z.string(),
+  EMAIL_HOST: z.string(),
+  EMAIL_PORT: z.number(),
+  EMAIL_USER: z.string(),
+  EMAIL_PASSWORD: z.string(),
 });
 
 type Env = z.infer<typeof envSchema>;
@@ -28,6 +32,10 @@ export const ENV: Env = {
   DB_HOST: process.env.DB_HOST as string,
   DB_PORT: Number(process.env.DB_PORT as string),
   SESSION_SECRET: process.env.SESSION_SECRET as string,
+  EMAIL_HOST: process.env.EMAIL_HOST as string,
+  EMAIL_PORT: Number(process.env.EMAIL_PORT as string),
+  EMAIL_USER: process.env.EMAIL_USER as string,
+  EMAIL_PASSWORD: process.env.EMAIL_PASSWORD as string,
 } as const;
 
 envSchema.parse(ENV);
