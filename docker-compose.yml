@@ -8,3 +8,8 @@ services:
     environment:
       POSTGRES_PASSWORD: secret
       POSTGRES_DB: dailydoit
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025

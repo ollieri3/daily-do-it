@@ -1,7 +1,7 @@
 import type { Express } from "express";
 
 import { main } from "./handlers/main.js";
-import { auth, signInLimiter } from "./handlers/auth.js";
+import { auth, signInLimiter, signUpLimiter } from "./handlers/auth.js";
 import { calendar } from "./handlers/calendar.js";
 import { error } from "./handlers/error.js";
 
@@ -13,7 +13,7 @@ export function addRoutes(app: Express) {
   app.get("/signin", auth.signIn);
   app.post("/signin", signInLimiter, auth.handleSignIn);
   app.post("/signout", isAuthenticated, auth.handleSignOut);
-  app.get("/signup", auth.signUp);
+  app.get("/signup", signUpLimiter, auth.signUp);
   app.post("/signup", auth.handleSignUp);
   app.get("/activate/:token", auth.activate);
 

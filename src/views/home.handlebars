@@ -2,11 +2,14 @@
   <link rel="stylesheet" href="/home.css" />
 {{/section}}
 
-<div class="m-auto flex max-w-7xl flex-wrap pt-20">
+<div
+  class="m-auto mt-10 flex max-w-7xl flex-wrap justify-center gap-16 md:mt-16 lg:mt-20"
+>
 
   <section class="grow basis-2/5">
-    <div class="m-auto max-w-prose p-2">
-      <h1 class="text-5xl font-semibold">Track and commit to a habit daily
+    <div class="max-w-prose px-5 md:px-0">
+      <h1 class="text-3xl font-semibold md:text-5xl">Visualize, track and commit
+        to a habit daily
       </h1>
 
       <p class="mt-4 text-xl text-gray-500">
@@ -17,11 +20,11 @@
       <a
         class="mt-4 inline-block rounded border-gray-700 bg-emerald-700 px-4 py-3 text-white shadow-md transition-colors hover:bg-emerald-800"
         href="/signup"
-      >Get started</a>
+      >Get Started</a>
     </div>
   </section>
 
-  <div class="calendar-container grow basis-3/5">
+  <div class="hidden md:block">
     <figure class="flex flex-col items-center">
       <div id="calendar">
         {{#months}}
@@ -69,8 +72,9 @@
 
 </div>
 
-<section class="mt-20 bg-emerald-100">
-  <div class="m-auto flex max-w-7xl justify-between py-10">
+{{! TODO: Finish this section off }}
+{{!-- <section class="mt-20 bg-emerald-100">
+  <div class="m-auto max-w-7xl flex-col justify-between py-10">
     <img
       class="rounded shadow-md"
       src="/img/everday-calendar-simone-giertz.webp"
@@ -84,4 +88,4 @@
     </div>
 
   </div>
-</section>
+</section> --}}

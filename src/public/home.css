@@ -72,9 +72,3 @@
     background: rgba(89, 58, 1, 0.986);
   }
 }
-
-@media screen and (max-width: 650px) {  
-  .calendar-container {
-    display: none;
-  }
-}

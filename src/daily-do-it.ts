@@ -12,13 +12,20 @@ import localeData from "dayjs/plugin/localeData.js";
 import bodyParser from "body-parser";
 import csrf from "csrf";
 import helmet from "helmet";
-import z from "zod";
-import validator from "validator";
+import validator from 'validator';
 
 import { ENV } from "./lib/environment.js";
 import { TRUSTED_IPS_CSV } from "./lib/proxy.js";
 import { addRoutes } from "./routes.js";
 import { pool } from "./lib/db.js";
+import { emailSchema, passwordSchema } from "./helpers/validations.js"
+
+declare module 'express-session' {
+  interface SessionData {
+    flash: any; //TODO: Make this sensible
+  }
+}
+
 
 const Tokens = new csrf();
 
@@ -36,6 +43,25 @@ if (ENV.DEPLOYMENT === "prod") {
     `loopback, linklocal, uniquelocal, ${TRUSTED_IPS_CSV}`,
   );
 }
+
+app.use(
+  session({
+    name: "dailydoit.sid",
+    store: new pgSession({
+      pool,
+      createTableIfMissing: true,
+    }),
+    secret: ENV.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+      secure: ENV.DEPLOYMENT === "prod",
+      sameSite: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
+    },
+  }),
+);
 
 app.use(helmet());
 
@@ -75,39 +101,10 @@ app.use(
 // Enable reading of URL Encoded Request bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(
-  session({
-    name: "dailydoit.sid",
-    store: new pgSession({
-      pool,
-      createTableIfMissing: true,
-    }),
-    secret: ENV.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    rolling: true,
-    cookie: {
-      secure: ENV.DEPLOYMENT === "prod",
-      sameSite: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
-    },
-  }),
-);
 app.use(passport.authenticate("session"));
 
 // Link json parser middleware to parse json body
 app.use(bodyParser.json());
-
-const emailSchema = z
-  .string()
-  .trim()
-  .min(1)
-  .max(254)
-  .refine((val) => validator.default.isEmail(val), {
-    message: "The email provided is not a valid email",
-  });
-
-const passwordSchema = z.string().min(1).max(100);
 
 // Passport Setup
 passport.use(
@@ -131,9 +128,17 @@ passport.use(
       });
     }
 
+    // Normalize the email
+    const emailNormalized = validator.default.normalizeEmail(email, {
+      gmail_remove_subaddress: false
+    });
+    if(!emailNormalized) {
+      throw new Error("An unexpected error ocurred when normalizing email");
+    }
+
     const { rows } = await pool.query(
       `SELECT id, email, salt, hashed_password FROM users WHERE email = $1`,
-      [email],
+      [emailNormalized],
     );
 
     const row = rows[0];
@@ -167,11 +172,18 @@ passport.deserializeUser((user: any, cb) => {
 
 // Provide values to all templates
 app.use((req, res, next) => {
+  // Provide user info to templates
   if (req.user) res.locals.user = req.user;
 
-  // Powers the dynamic favicons
+  // Powers the dynamic favicons set in main template
   const todaysDate = dayjs().get("date");
   res.locals.todaysDate = todaysDate;
+
+  // Provide flash messages to templates
+  if(req.session.flash) {
+    res.locals.flash = req.session.flash;
+    delete req.session.flash;
+  }
   next();
 });
 

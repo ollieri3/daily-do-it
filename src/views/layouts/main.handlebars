@@ -5,18 +5,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{_csrfToken}}" />
-    <link rel="stylesheet" href="/main.css" />
 
     {{!-- Favicons --}}
     <link rel="icon" href="/favicon.ico" sizes="32x32">
     <link rel="icon" href="/favicons/{{todaysDate}}-favicon.svg" type="image/svg+xml">
+
+    <link rel="stylesheet" href="/main.css" />
+
+
 
     {{!-- TODO:  add apple-touch and manifest icons https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs --}}
     {{{_sections.head}}}
     {{{_sections.scripts}}}
   </head>
 
-  <header class="w-full border-b px-5 py-4">
+  <header class="w-full border-b px-5 py-5 shadow-sm">
     <div class="flex items-center justify-between max-w-7xl m-auto">
       
       <a href="/" class="inline-block text-xl font-medium">Daily Do It.</a>
@@ -28,7 +31,7 @@
             <button type="submit">Sign Out</button>
           </form>
         {{else}}
-          <a href="/signup" class="inline-block rounded border-gray-700 bg-emerald-700 px-3 py-2 text-white transition-colors hover:bg-emerald-800">Sign up</a>
+          {{!-- <a href="/signup" class="inline-block rounded border border-emerald-500 px-3 py-2 transition-colors hover:bg-emerald-700 hover:text-white hover:border-white">Sign Up</a> --}}
           <a href="/signin" class="inline-flex gap-2 items-center hover:text-sky-700">Sign In</a>
         {{/if}}
       </nav>

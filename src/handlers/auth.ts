@@ -2,10 +2,14 @@ import type { Request, Response, NextFunction } from "express";
 import rateLimit from "express-rate-limit";
 import passport from "passport";
 import { randomBytes, pbkdf2 } from "crypto";
-import { pool } from "../lib/db.js";
-import { mail } from "../lib/mail.js";
 import dayjs from "dayjs";
 import z from "zod";
+import validator from "validator";
+
+import { pool } from "../lib/db.js";
+import { user } from "../lib/user.js";
+import { emailSchema, passwordSchema } from "../helpers/validations.js";
+import { ENV } from "../lib/environment.js";
 
 function signIn(req: Request, res: Response) {
   let errors;
@@ -19,10 +23,11 @@ function signIn(req: Request, res: Response) {
 }
 
 export const signInLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
+  windowMs: 60 * 60 * 1000, // 1Hour
+  max: 20,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: () => ENV.DEPLOYMENT === "dev",
 });
 
 const handleSignIn = passport.authenticate("local", {
@@ -36,7 +41,62 @@ function signUp(req: Request, res: Response) {
   res.render("signup");
 }
 
-function handleSignUp(req: Request, res: Response, next: NextFunction) {
+export const signUpLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1Hour
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: () => ENV.DEPLOYMENT === "dev",
+});
+
+async function handleSignUp(req: Request, res: Response, next: NextFunction) {
+  // Validate the email first
+  const signUpSchema = z.object({
+    email: emailSchema,
+    password: passwordSchema,
+  });
+
+  // Normalize the email
+  const emailNormalized = validator.default.normalizeEmail(req.body.email, {
+    gmail_remove_subaddress: false,
+  });
+  if (!emailNormalized) {
+    return next(
+      new Error("An unexpected error ocurred when normalizing email"),
+    );
+  }
+
+  //Check email doesn't already exist
+  const emailResult = await pool.query(
+    `SELECT id FROM users WHERE email = $1`,
+    [emailNormalized],
+  );
+  if (emailResult.rowCount > 0) {
+    req.session.flash = {
+      email: {
+        _errors: [
+          "A link to activate your account has been emailed to the address provided.",
+        ],
+      },
+    };
+    return req.session.save(() => {
+      res.redirect("/signup");
+    });
+  }
+
+  // validate the password
+  const result = signUpSchema.safeParse({
+    email: req.body.email,
+    password: req.body.password,
+  });
+  if (result.success === false) {
+    // For some reason .save is needed to actually save the message to session
+    req.session.flash = result.error.format();
+    return req.session.save(() => {
+      res.redirect("/signup");
+    });
+  }
+
   const salt = randomBytes(16);
   pbkdf2(
     req.body.password,
@@ -49,29 +109,22 @@ function handleSignUp(req: Request, res: Response, next: NextFunction) {
       const hashedPassword = derivedKey.toString("hex");
       const saltString = salt.toString("hex");
 
-      // Account activation stuff
+      // Account activation
       const token = randomBytes(16).toString("hex");
-      console.log("token: ", token);
-
       const expires = dayjs().add(6, "hours").toISOString();
-      console.log("expires: ", expires);
 
       try {
-        console.log("Beginning transaction");
         await pool.query("BEGIN");
 
-        console.log("Inserting user");
         const result = await pool.query(
           `INSERT INTO users(email, hashed_password, salt) VALUES($1, $2, $3) RETURNING id, email`,
-          [req.body.email, hashedPassword, saltString],
+          [emailNormalized, hashedPassword, saltString],
         );
 
-        console.log("Inserting activation token");
         await pool.query(
           `INSERT INTO activation_tokens (user_id, token, expires) VALUES($1, $2, $3)`,
           [result.rows[0].id, token, expires],
         );
-        console.log("Committing transaction");
         await pool.query("COMMIT");
       } catch (err) {
         console.error(err);
@@ -79,10 +132,29 @@ function handleSignUp(req: Request, res: Response, next: NextFunction) {
         return next(err);
       }
 
-      // TODO: Construct a proper URL here wih a token link
-      // mail.sendAccountConfirmationEmail(req.body.email, token);
+      await user.sendAccountConfirmationEmail(emailNormalized, token);
 
-      return res.redirect("/");
+      // Query user and sign them in
+      const userResult = await pool.query(
+        `SELECT id, email FROM users WHERE email = $1`,
+        [emailNormalized],
+      );
+      if (!userResult.rows[0]) {
+        return next(
+          new Error(
+            "An unexpected error ocurred when signing you in, please try sign in again.",
+          ),
+        );
+      }
+
+      // Finally login the user and send them to their calendar!
+      return req.login(
+        { id: userResult.rows[0].id, email: userResult.rows[0].email },
+        (err) => {
+          if (err) return next(err);
+          return res.redirect("/");
+        },
+      );
     },
   );
 }
