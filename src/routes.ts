@@ -13,8 +13,8 @@ export function addRoutes(app: Express) {
   app.get("/signin", auth.signIn);
   app.post("/signin", signInLimiter, auth.handleSignIn);
   app.post("/signout", isAuthenticated, auth.handleSignOut);
-  app.get("/signup", signUpLimiter, auth.signUp);
-  app.post("/signup", auth.handleSignUp);
+  app.get("/signup", auth.signUp);
+  app.post("/signup", signUpLimiter, auth.handleSignUp);
   app.get("/activate/:token", auth.activate);
 
   app.get("/calendar/:year", isAuthenticated, calendar.getCalendar);

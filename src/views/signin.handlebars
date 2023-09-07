@@ -1,41 +1,36 @@
-<div class="mt-16 flex">
+{{#> formpage}}
+  <h1 class="mb-10 text-center text-3xl font-medium">Sign in to your account</h1>
 
-  <div class="m-auto w-2/3 max-w-lg rounded-md border p-10">
-
-    <h1 class="mb-10 text-center text-3xl font-medium">Sign in to your account</h1>
-
-    <form action="/signin" method="post" class="flex flex-col gap-5">
-      {{errors}}
-      <input type="hidden" name="_csrf" value="{{_csrfToken}}" />
-      <section>
-        <label for="email" class="mb-1 block">Email</label>
-        <input
-          id="email"
-          class="block w-full rounded-md border p-2"
-          name="username"
-          type="email"
-          autocomplete="email"
-          placeholder="Enter your email"
-          required
-        />
-      </section>
-      <section>
-        <label for="current-password" class="mb-1 block">Password</label>
-        <input
-          id="current-password"
-          class="block w-full rounded-md border p-2"
-          name="password"
-          type="password"
-          autocomplete="current-password"
-          placeholder="Enter your password"
-          required
-        />
-      </section>
-      <button
-        type="submit"
-        class="mt-5 w-full rounded border bg-gray-200 p-2"
-      >Sign in now</button>
-    </form>
-  </div>
-
-</div>
+  <form action="/signin" method="post" class="flex flex-col gap-5">
+    {{errors}}
+    <input type="hidden" name="_csrf" value="{{_csrfToken}}" />
+    <section>
+      <label for="email" class="mb-1 block font-semibold">Email</label>
+      <input
+        id="email"
+        class="block w-full rounded-md border p-2"
+        name="username"
+        type="email"
+        autocomplete="email"
+        placeholder="Enter your email"
+        required
+      />
+    </section>
+    <section>
+      <label for="current-password" class="mb-1 block font-semibold">Password</label>
+      <input
+        id="current-password"
+        class="block w-full rounded-md border p-2"
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Enter your password"
+        required
+      />
+    </section>
+    <button
+      type="submit"
+      class="mt-4 inline-block rounded border-gray-700 bg-emerald-700 px-4 py-3 text-white shadow-md transition-colors hover:bg-emerald-800"
+    >Sign In</button>
+  </form>
+{{/formpage}}
