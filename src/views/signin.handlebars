@@ -1,7 +1,7 @@
 {{#> formpage}}
   <h1 class="mb-10 text-center text-3xl font-medium">Sign in to your account</h1>
 
-  <form action="/signin" method="post" class="flex flex-col gap-5">
+  <form action="/signin" method="post" class="flex flex-col gap-7">
     {{errors}}
     <input type="hidden" name="_csrf" value="{{_csrfToken}}" />
     <section>
