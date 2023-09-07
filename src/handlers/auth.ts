@@ -34,7 +34,7 @@ const handleSignIn = passport.authenticate("local", {
   session: true,
   successRedirect: "/calendar",
   failureRedirect: "/signin",
-  failureMessage: true,
+  passReqToCallback: true,
 });
 
 function signUp(req: Request, res: Response) {
@@ -55,6 +55,19 @@ async function handleSignUp(req: Request, res: Response, next: NextFunction) {
     email: emailSchema,
     password: passwordSchema,
   });
+
+  const result = signUpSchema.safeParse({
+    email: req.body.email,
+    password: req.body.password,
+  });
+
+  if (result.success === false) {
+    // For some reason .save is needed to actually save the message to session
+    req.session.flash = result.error.format();
+    return req.session.save(() => {
+      res.redirect("/signup");
+    });
+  }
 
   // Normalize the email
   const emailNormalized = validator.default.normalizeEmail(req.body.email, {
@@ -79,19 +92,6 @@ async function handleSignUp(req: Request, res: Response, next: NextFunction) {
         ],
       },
     };
-    return req.session.save(() => {
-      res.redirect("/signup");
-    });
-  }
-
-  // validate the password
-  const result = signUpSchema.safeParse({
-    email: req.body.email,
-    password: req.body.password,
-  });
-  if (result.success === false) {
-    // For some reason .save is needed to actually save the message to session
-    req.session.flash = result.error.format();
     return req.session.save(() => {
       res.redirect("/signup");
     });

@@ -12,20 +12,20 @@ import localeData from "dayjs/plugin/localeData.js";
 import bodyParser from "body-parser";
 import csrf from "csrf";
 import helmet from "helmet";
-import validator from 'validator';
+import validator from "validator";
+import z from "zod";
 
 import { ENV } from "./lib/environment.js";
 import { TRUSTED_IPS_CSV } from "./lib/proxy.js";
 import { addRoutes } from "./routes.js";
 import { pool } from "./lib/db.js";
-import { emailSchema, passwordSchema } from "./helpers/validations.js"
+import { emailSchema, passwordSchema } from "./helpers/validations.js";
 
-declare module 'express-session' {
+declare module "express-session" {
   interface SessionData {
     flash: any; //TODO: Make this sensible
   }
 }
-
 
 const Tokens = new csrf();
 
@@ -109,30 +109,42 @@ app.use(bodyParser.json());
 // Passport Setup
 passport.use(
   "local",
-  new LocalStrategy(async function verify(email, password, cb) {
-    // Input validations
-    const emailValidation = emailSchema.safeParse(email);
-    if (emailValidation.success === false) {
-      return cb(null, false, {
-        message: emailValidation.error.issues
-          .map((issue) => `${issue.message}\n`)
-          .join(),
-      });
-    }
-    const passwordValiation = passwordSchema.safeParse(password);
-    if (passwordValiation.success === false) {
-      return cb(null, false, {
-        message: passwordValiation.error.issues
-          .map((issue) => `${issue.message}\n`)
-          .join(),
+  new LocalStrategy({ passReqToCallback: true }, async function verify(
+    req,
+    email,
+    password,
+    done,
+  ) {
+    const signInSchema = z.object({
+      email: emailSchema,
+      password: passwordSchema,
+    });
+
+    const result = signInSchema.safeParse({
+      email,
+      password,
+    });
+
+    if (result.success === false) {
+      const { fieldErrors } = result.error.flatten();
+      let message = "";
+      if (fieldErrors.email) {
+        message += `<li>${fieldErrors.email}</li>`;
+      }
+      if (fieldErrors.password) {
+        message += `<li>${fieldErrors.password}</li>`;
+      }
+      req.session.flash = message;
+      return req.session.save(() => {
+        done(null);
       });
     }
 
     // Normalize the email
     const emailNormalized = validator.default.normalizeEmail(email, {
-      gmail_remove_subaddress: false
+      gmail_remove_subaddress: false,
     });
-    if(!emailNormalized) {
+    if (!emailNormalized) {
       throw new Error("An unexpected error ocurred when normalizing email");
     }
 
@@ -143,17 +155,23 @@ passport.use(
 
     const row = rows[0];
     if (!row) {
-      return cb(null, false, { message: "Incorrect email or password." });
+      req.session.flash = `<li>Incorrect email or password.</li>`;
+      return req.session.save(() => {
+        done(null);
+      });
     }
 
     const salt = Buffer.from(row.salt, "hex");
     pbkdf2(password, salt, 600_000, 32, "sha256", (err, derivedKey) => {
-      if (err) return cb(err);
+      if (err) return done(err);
       const hash = Buffer.from(row.hashed_password, "hex");
       if (!timingSafeEqual(hash, derivedKey)) {
-        return cb(null, false, { message: "Incorrect email or password" });
+        req.session.flash = `<li>Incorrect email or password.</li>`;
+        return req.session.save(() => {
+          done(null);
+        });
       }
-      return cb(null, row);
+      return done(null, row);
     });
   }),
 );
@@ -180,7 +198,7 @@ app.use((req, res, next) => {
   res.locals.todaysDate = todaysDate;
 
   // Provide flash messages to templates
-  if(req.session.flash) {
+  if (req.session.flash) {
     res.locals.flash = req.session.flash;
     delete req.session.flash;
   }
