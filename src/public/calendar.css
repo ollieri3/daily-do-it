@@ -1,14 +1,15 @@
 :root {
-  --day-size: 35px;
+  --day-size: 31.5px;
 }
 
 #calendar {
   display: grid;
   grid-template-columns: repeat(4, [col-start] 1fr);
   justify-content: center;
-  gap: 20px;
+  gap: 15px;
   max-width: 80rem;
-  margin: 2rem auto;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
 }
 
 .day {
@@ -17,7 +18,7 @@
   justify-content: center;
   z-index: 1;
   transition: background 0.2s;
-  font-size: 1rem;
+  font-size: 0.875rem;
   margin: 2px;
   width: var(--day-size);
   height: calc(var(--day-size) * 1.1547);
