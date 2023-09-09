@@ -14,6 +14,17 @@ async function getCalendar(req: Request, res: Response, next: NextFunction) {
     return next(result.error);
   }
 
+  // Check if the user is activated
+  let userActivated: boolean;
+  try {
+    const result = await pool.query(`SELECT active FROM USERS WHERE id = $1`, [
+      (req.user as any).id,
+    ]);
+    userActivated = result.rows[0].active;
+  } catch (err) {
+    return next(err);
+  }
+
   // Query all days in year for current user
   let userDays: { id: number; date: string }[];
   try {
@@ -44,7 +55,7 @@ async function getCalendar(req: Request, res: Response, next: NextFunction) {
       }),
     };
   });
-  res.render("calendar", { months });
+  res.render("calendar", { months, userActivated });
 }
 
 function home(_: Request, res: Response) {

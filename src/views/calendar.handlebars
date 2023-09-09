@@ -6,31 +6,45 @@
   <script defer src="/calendar.js"></script>
 {{/section}}
 
-<div id="calendar">
-  {{#months}}
-    <div id="month">
-      <div id="month-name" class="ml-1 font-bold">{{month}}</div>
-      <div id="days">
-        {{#days}}
-          {{#if isComplete}}
-            <button
-              id="day"
-              class="day complete"
-              data-date="{{date}}"
-              data-is-complete="{{isComplete}}"
-            >{{day}}</button>
-          {{else if isToday}}
-            <button
-              id="day"
-              class="day today"
-              data-date="{{date}}"
-            >{{day}}</button>
-          {{else}}
-            <button id="day" class="day" data-date="{{date}}">{{day}}</button>
-          {{/if}}
+<div class="w-full p-5">
 
-        {{/days}}
-      </div>
+  {{#unless userActivated}}
+    <div
+      class="m-auto mb-8 mt-4 max-w-prose rounded-md bg-emerald-100 px-4 py-2"
+    >
+      <h1 class="mb-2 font-semibold text-emerald-950">Welcome!</h1>
+      <p class="text-emerald-950">Please confirm your email address by clicking
+        the link in the email sent to you.</p>
     </div>
-  {{/months}}
+  {{/unless}}
+
+  <div id="calendar">
+    {{#months}}
+      <div id="month">
+        <div id="month-name" class="ml-1 font-bold">{{month}}</div>
+        <div id="days">
+          {{#days}}
+            {{#if isComplete}}
+              <button
+                id="day"
+                class="day complete"
+                data-date="{{date}}"
+                data-is-complete="{{isComplete}}"
+              >{{day}}</button>
+            {{else if isToday}}
+              <button
+                id="day"
+                class="day today"
+                data-date="{{date}}"
+              >{{day}}</button>
+            {{else}}
+              <button id="day" class="day" data-date="{{date}}">{{day}}</button>
+            {{/if}}
+
+          {{/days}}
+        </div>
+      </div>
+    {{/months}}
+  </div>
+
 </div>
