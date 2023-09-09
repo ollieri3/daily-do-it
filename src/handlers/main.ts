@@ -21,7 +21,9 @@ function home(req: Request, res: Response) {
         return {
           day: i + 1,
           animationOrder: daysCount++,
-          isComplete: today.isAfter(dayjs(new Date(currentYear, index, i + 1))),
+          // Uncomment below to limit animation to current day
+          // isComplete: today.isAfter(dayjs(new Date(currentYear, index, i + 1))),
+          isComplete: true,
         };
       }),
     };
