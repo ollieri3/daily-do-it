@@ -1,15 +1,22 @@
 import type { Request, Response, ErrorRequestHandler } from "express";
+import { ENV } from "../lib/environment.js";
 
 function notFound(req: Request, res: Response) {
   res.statusCode = 404;
   res.render("404");
 }
 
-const serverError: ErrorRequestHandler = (err, req, res, next) => {
-  console.error(err);
-  // TODO: If development mode, show stack trace in view
+const serverError: ErrorRequestHandler = (error, req, res, next) => {
+  console.error(error);
   res.status(500);
-  res.render("error");
+
+  if (ENV.DEPLOYMENT === "dev") {
+    return res.render("error", {
+      error: error instanceof Error ? error.toString() : error,
+    });
+  } else {
+    return res.render("error");
+  }
 };
 
 export const error = {

@@ -9,7 +9,10 @@ async function getCalendar(req: Request, res: Response, next: NextFunction) {
   const paramSchema = z.string().refine((val) => dayjs(val).isValid(), {
     message: "Year parameter is not a valid date",
   });
-  paramSchema.parse(req.params.year);
+  const result = paramSchema.safeParse(req.params.year);
+  if (result.success === false) {
+    return next(result.error);
+  }
 
   // Query all days in year for current user
   let userDays: { id: number; date: string }[];
@@ -44,7 +47,7 @@ async function getCalendar(req: Request, res: Response, next: NextFunction) {
   res.render("calendar", { months });
 }
 
-async function home(req: Request, res: Response) {
+function home(_: Request, res: Response) {
   return res.redirect(`/calendar/${new Date().getFullYear()}`);
 }
 
