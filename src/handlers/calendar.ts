@@ -1,14 +1,27 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import dayjs from "dayjs";
+import z from "zod";
 
 import { pool } from "../lib/db.js";
 
-async function getCalendar(req: Request, res: Response) {
+async function getCalendar(req: Request, res: Response, next: NextFunction) {
+  // Validate inputs
+  const paramSchema = z.string().refine((val) => dayjs(val).isValid(), {
+    message: "Year parameter is not a valid date",
+  });
+  paramSchema.parse(req.params.year);
+
   // Query all days in year for current user
-  const { rows: userDays } = await pool.query(
-    `SELECT id, date FROM days WHERE user_id = $1`,
-    [(req.user as any).id],
-  );
+  let userDays: { id: number; date: string }[];
+  try {
+    const { rows } = await pool.query(
+      `SELECT id, date FROM days WHERE user_id = $1 AND EXTRACT(YEAR FROM date) = $2`,
+      [(req.user as any).id, req.params.year],
+    );
+    userDays = rows;
+  } catch (err) {
+    return next(err);
+  }
 
   const months = dayjs.monthsShort().map((month, index) => {
     const monthDate = dayjs(new Date(+req.params.year, index));

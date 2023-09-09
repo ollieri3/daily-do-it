@@ -12,8 +12,6 @@
 
     <link rel="stylesheet" href="/main.css" />
 
-
-
     {{!-- TODO:  add apple-touch and manifest icons https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs --}}
     {{{_sections.head}}}
     {{{_sections.scripts}}}
@@ -31,7 +29,6 @@
             <button type="submit">Sign Out</button>
           </form>
         {{else}}
-          {{!-- <a href="/signup" class="inline-block rounded border border-emerald-500 px-3 py-2 transition-colors hover:bg-emerald-700 hover:text-white hover:border-white">Sign Up</a> --}}
           <a href="/signin" class="inline-flex gap-2 items-center hover:text-sky-700">Sign In</a>
         {{/if}}
       </nav>
