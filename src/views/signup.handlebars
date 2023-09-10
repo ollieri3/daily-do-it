@@ -2,81 +2,77 @@
   <script defer src="/signup.js"></script>
 {{/section}}
 
-<div class="mt-16">
+{{#> formpage}}
+  <p class="mb-2 text-center text-gray-500">
+    Start your habit tracking journey</p>
+  <h1 class="mb-10 text-center text-3xl font-medium">Create your account</h1>
 
-  <div class="m-5 rounded-md border p-5 sm:m-auto sm:max-w-lg sm:p-10">
-    <p class="mb-2 text-center text-gray-500">
-      Start your habit tracking journey</p>
-    <h1 class="mb-10 text-center text-3xl font-medium">Create your account</h1>
+  <form action="/signup" method="post" class="flex flex-col gap-7">
 
-    <form action="/signup" method="post" class="flex flex-col gap-7">
+    {{#if flash}}
+      <div>
+        <p class="mb-2 text-red-500">There was an error signing up. Please try
+          again.</p>
+        <ul class="list-disc pl-6">
+          {{#with flash.email}}
+            {{#each _errors}}
+              <li>{{this}}</li>
+            {{/each}}
+          {{/with}}
 
-      {{#if flash}}
-        <div>
-          <p class="mb-2 text-red-500">There was an error signing up. Please try
-            again.</p>
-          <ul class="list-disc pl-6">
-            {{#with flash.email}}
-              {{#each _errors}}
-                <li>{{this}}</li>
-              {{/each}}
-            {{/with}}
+          {{#with flash.password}}
+            {{#each _errors}}
+              <li>{{this}}</li>
+            {{/each}}
+          {{/with}}
+        </ul>
+      </div>
+    {{/if}}
 
-            {{#with flash.password}}
-              {{#each _errors}}
-                <li>{{this}}</li>
-              {{/each}}
-            {{/with}}
-          </ul>
-        </div>
-      {{/if}}
+    <input type="hidden" name="_csrf" value="{{_csrfToken}}" />
 
-      <input type="hidden" name="_csrf" value="{{_csrfToken}}" />
-
-      <section>
-        <label for="email" class="mb-1 block font-semibold">Email</label>
-        <input
-          id="email"
-          class="block w-full rounded-md border p-2"
-          name="email"
-          type="email"
-          autocomplete="email"
-          required
-          placeholder="Enter your email"
-        />
-      </section>
-      <section class="relative">
-        <label
-          for="new-password"
-          class="mb-1 block font-semibold"
-        >Password</label>
-        <input
-          id="new-password"
-          class="block w-full rounded-md border p-2"
-          name="password"
-          type="password"
-          autocomplete="new-password"
-          placeholder="Choose your Password"
-          required
-        />
-        <button
-          id="toggle-password"
-          class="text-md absolute right-0 top-0 font-light text-gray-500"
-          type="button"
-          aria-label="Show password as plain text. Warning: this will display your password on the screen."
-        >Show Password</button>
-      </section>
-
+    <section>
+      <label for="email" class="mb-1 block font-semibold">Email</label>
+      <input
+        id="email"
+        class="block w-full rounded-md border p-2"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        placeholder="Enter your email"
+      />
+    </section>
+    <section class="relative">
+      <label
+        for="new-password"
+        class="mb-1 block font-semibold"
+      >Password</label>
+      <input
+        id="new-password"
+        class="block w-full rounded-md border p-2"
+        name="password"
+        type="password"
+        autocomplete="new-password"
+        placeholder="Choose your Password"
+        required
+      />
       <button
-        type="submit"
-        class="mt-4 inline-block rounded border-gray-700 bg-emerald-700 px-4 py-3 text-white shadow-md transition-colors hover:bg-emerald-800"
-      >Sign Up Now</button>
-    </form>
+        id="toggle-password"
+        class="text-md absolute right-0 top-0 font-light text-gray-500"
+        type="button"
+        aria-label="Show password as plain text. Warning: this will display your password on the screen."
+      >Show Password</button>
+    </section>
 
-    <div class="mt-10">
-      <p class="text-sm">Already have an account?
-        <a href="/signin" class="text-sky-800">Sign in here.</a></p>
-    </div>
+    <button
+      type="submit"
+      class="mt-4 inline-block rounded border-gray-700 bg-emerald-700 px-4 py-3 text-white shadow-md transition-colors hover:bg-emerald-800"
+    >Sign Up Now</button>
+  </form>
 
+  <div class="mt-10">
+    <p class="text-sm">Already have an account?
+      <a href="/signin" class="text-sky-800">Sign in here.</a></p>
   </div>
-</div>
+{{/formpage}}
