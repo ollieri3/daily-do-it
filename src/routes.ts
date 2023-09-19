@@ -24,6 +24,8 @@ export function addRoutes(app: Express) {
   app.post("/day", isAuthenticated, calendar.submitDay);
   app.delete("/day", isAuthenticated, calendar.removeDay);
 
+  app.get("/privacy-policy", main.privacyPolicy);
+
   app.use(error.notFound);
   app.use(error.serverError);
 }

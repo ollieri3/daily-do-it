@@ -35,6 +35,11 @@ function home(req: Request, res: Response) {
   });
 }
 
+function privacyPolicy(_: Request, res: Response) {
+  return res.render("privacy-policy");
+}
+
 export const main = {
   home,
+  privacyPolicy,
 };
