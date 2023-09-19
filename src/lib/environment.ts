@@ -21,6 +21,8 @@ const envSchema = z.object({
   EMAIL_PORT: z.number(),
   EMAIL_USER: z.string(),
   EMAIL_PASSWORD: z.string(),
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
 });
 
 type Env = z.infer<typeof envSchema>;
@@ -36,6 +38,8 @@ export const ENV: Env = {
   EMAIL_PORT: Number(process.env.EMAIL_PORT as string),
   EMAIL_USER: process.env.EMAIL_USER as string,
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD as string,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID as string,
+  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET as string,
 } as const;
 
 envSchema.parse(ENV);

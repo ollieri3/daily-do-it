@@ -10,6 +10,8 @@ import { isAuthenticated } from "./middleware/auth.js";
 export function addRoutes(app: Express) {
   app.get("/", main.home);
 
+  app.get("/oauth2/redirect/google", auth.googleSignInRedirect);
+  app.get("/signin/federated/google", auth.googleSignIn);
   app.get("/signin", auth.signIn);
   app.post("/signin", signInLimiter, auth.handleSignIn);
   app.post("/signout", isAuthenticated, auth.handleSignOut);

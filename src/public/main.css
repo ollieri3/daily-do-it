@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/**
+ * A11y Helpers
+ */
+.visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
+/**
+* Global Styles
+*/
+.google-sign-in {
+  display: block;
+  margin: auto;
+  width: 215px;
+  height: 52px;
+  outline: none;
+  border:none;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("img/btn_google_signin_light_normal_web@2x.png");
+}
+.google-sign-in:focus-visible { 
+  background-image: url("img/btn_google_signin_light_focus_web@2x.png");
+}
+.google-sign-in:active {
+  background-image: url("img/btn_google_signin_light_pressed_web@2x.png");
+}

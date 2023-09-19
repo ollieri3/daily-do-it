@@ -14,6 +14,7 @@ import csrf from "csrf";
 import helmet from "helmet";
 import validator from "validator";
 import z from "zod";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 import { ENV } from "./lib/environment.js";
 import { TRUSTED_IPS_CSV } from "./lib/proxy.js";
@@ -44,6 +45,11 @@ if (ENV.DEPLOYMENT === "prod") {
   );
 }
 
+// Static files
+app.use(
+  express.static(fileURLToPath(new URL(".", import.meta.url) + "public")),
+);
+
 app.use(
   session({
     name: "dailydoit.sid",
@@ -57,11 +63,13 @@ app.use(
     rolling: true,
     cookie: {
       secure: ENV.DEPLOYMENT === "prod",
-      sameSite: true,
+      sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     },
   }),
 );
+
+app.use(passport.session());
 
 app.use(helmet());
 
@@ -93,15 +101,8 @@ app.set("view engine", "handlebars");
 
 app.set("views", fileURLToPath(new URL(".", import.meta.url) + "views"));
 
-// Static files
-app.use(
-  express.static(fileURLToPath(new URL(".", import.meta.url) + "public")),
-);
-
 // Enable reading of URL Encoded Request bodies
 app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(passport.authenticate("session"));
 
 // Link json parser middleware to parse json body
 app.use(bodyParser.json());
@@ -176,16 +177,59 @@ passport.use(
   }),
 );
 
+// Google Oauth
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: ENV.GOOGLE_CLIENT_ID,
+      clientSecret: ENV.GOOGLE_CLIENT_SECRET,
+      callbackURL: "/oauth2/redirect/google",
+      scope: ["email"],
+      passReqToCallback: true,
+    },
+    async function verify(req, _accessToken, _refreshToken, profile, done) {
+      try {
+        // Check if the user has logged in before
+        const federatedCredentialsQuery = await pool.query(
+          `SELECT id, user_id FROM federated_credentials WHERE provider = $1 AND provider_user_id = $2`,
+          [profile.provider, profile.id],
+        );
+
+        if (federatedCredentialsQuery.rowCount > 0) {
+          //TODO: Add better error handling
+          // User has logged in with Google before
+          const userQuery = await pool.query(
+            `SELECT id, email FROM users WHERE id = $1`,
+            [federatedCredentialsQuery.rows[0].user_id],
+          );
+          done(null, userQuery.rows[0]);
+        } else {
+          // Create new federated_credential & user
+          await pool.query("BEGIN");
+          const userQuery = await pool.query(
+            `INSERT INTO users(email, active) VALUES($1, true) RETURNING id, email`,
+            [(profile.emails as any)[0].value], //TODO: Improve this
+          );
+          await pool.query(
+            `INSERT INTO federated_credentials(user_id, provider, provider_user_id) VALUES($1, $2, $3)`,
+            [userQuery.rows[0].id, profile.provider, profile.id],
+          );
+          await pool.query("COMMIT");
+          done(null, userQuery.rows[0]);
+        }
+      } catch (err) {
+        console.log("err: ", err);
+      }
+    },
+  ),
+);
+
 passport.serializeUser((user: any, cb) => {
-  process.nextTick(async () => {
-    return cb(null, { id: user.id, email: user.email });
-  });
+  return cb(null, { id: user.id, email: user.email });
 });
 
 passport.deserializeUser((user: any, cb) => {
-  process.nextTick(() => {
-    return cb(null, user);
-  });
+  return cb(null, user);
 });
 
 // Provide values to all templates

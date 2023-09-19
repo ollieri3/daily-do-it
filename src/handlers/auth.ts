@@ -32,8 +32,16 @@ export const signInLimiter = rateLimit({
 
 const handleSignIn = passport.authenticate("local", {
   session: true,
-  successRedirect: "/calendar",
   failureRedirect: "/signin",
+  passReqToCallback: true,
+});
+
+const googleSignIn = passport.authenticate("google");
+
+const googleSignInRedirect = passport.authenticate("google", {
+  session: true,
+  failureRedirect: "/signin",
+  successRedirect: "/calendar",
   passReqToCallback: true,
 });
 
@@ -214,4 +222,6 @@ export const auth = {
   handleSignUp,
   handleSignOut,
   activate,
+  googleSignIn,
+  googleSignInRedirect,
 };
