@@ -71,7 +71,15 @@ app.use(
 
 app.use(passport.session());
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        "img-src": ["'self'", "data:", "img.shields.io"], // Allow img.shields.io for footer badges
+      },
+    },
+  }),
+);
 
 /**
  * Temporarily disable any cacheing, this is to prevent

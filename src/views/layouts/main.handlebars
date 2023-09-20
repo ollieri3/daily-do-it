@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <title>Daily Do It</title>
     <meta charset="UTF-8" />
@@ -17,27 +17,56 @@
     {{{_sections.scripts}}}
   </head>
 
-  <header class="w-full border-b px-5 py-5 shadow-sm">
-    <div class="flex items-center justify-between max-w-7xl m-auto">
-      
-      <a href="/" class="inline-block text-xl font-medium">Daily Do It.</a>
+  <body class="h-full flex flex-col">
 
-      <nav class="flex items-center gap-5 justify-center">
-        {{#if user}}
-          <form action="/signout" method="post" class="mb-0">
-            <input type="hidden" name="_csrf" value="{{_csrfToken}}" />
-            <button type="submit">Sign Out</button>
-          </form>
-        {{else}}
-          <a href="/signin" class="inline-flex gap-2 items-center hover:text-sky-700">Sign In</a>
-        {{/if}}
-      </nav>
+    <header class="w-full border-b p-5 shadow-sm">
+      <div class="flex items-center justify-between max-w-7xl m-auto">
+        <a href="/" class="inline-block text-xl font-medium">Daily Do It.</a>
+        <nav class="flex items-center gap-5 justify-center">
+          {{#if user}}
+            <form action="/signout" method="post" class="mb-0">
+              <input type="hidden" name="_csrf" value="{{_csrfToken}}" />
+              <button type="submit">Sign Out</button>
+            </form>
+          {{else}}
+            <a href="/signin" class="inline-flex gap-2 items-center hover:text-sky-700">Sign In</a>
+          {{/if}}
+        </nav>
+      </div>
+    </header>
 
-    </div>
+    <main class="grow shrink-0 basis-auto">
+      {{{body}}}
+    </main>
 
-  </header>
+    <footer class="flex-shrink-0 p-5 bg-gray-50">
+      <div class="max-w-7xl m-auto flex justify-between w-full flex-wrap gap-5">
+
+        <!-- Boring Stuff -->
+        <ul class="flex gap-5 flex-wrap">
+          <li><a href="/privacy-policy" class="inline-block">Privacy Policy</a></li>
+          {{!-- TODO: Add this <li><a href="/terms-and-conditions" class="inline-block">Terms and Conditions</a></li> --}}
+        </ul>
+
+        <!-- Fun Stuff -->
+        <ul class="flex gap-5">
+          <li>
+            <a href="https://twitter.com/ORidsdale" target="_blank">
+              <img src="https://img.shields.io/twitter/follow/ORidsdale">
+              <span class="visually-hidden">Follow Oliver Ridsdale on Twitter (opens in a new window)</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://github.com/ollieri3/daily-do-it" target="_blank">
+              <img alt="A badge signifying that the source code of this project is held under an MIT License" src="https://img.shields.io/github/license/ollieri3/daily-do-it">
+              <span class="visually-hidden">Go to the Daily Do It Github Repository (opens in a new window)</span>
+            </a>
+          </li>
+        </ul>
+
+      </div>
+    </footer>
 
   <body>
-    {{{body}}}
-  </body>
 </html>
