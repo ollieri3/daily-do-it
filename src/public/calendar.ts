@@ -4,7 +4,8 @@ if (!calender) {
 }
 
 calender.addEventListener("click", async (event) => {
-  if (event.target && (event.target as HTMLButtonElement).id !== "day") return;
+  if (event.target && (event.target as HTMLButtonElement).tagName !== "BUTTON")
+    return;
 
   const btn = event.target as HTMLButtonElement;
   if (!btn) {
@@ -72,4 +73,39 @@ function getCSRFToken(): string {
     throw new Error("No CSRF token value");
   }
   return _csrf;
+}
+
+// Sticky jump to day button handling
+const jumpToBtn = document.getElementById("jump-to-today");
+const jumpToContainer = document.getElementById("jump-to-today-container");
+
+if (!jumpToBtn) {
+  throw new Error("Can't find jump to today button");
+}
+
+if (!jumpToContainer) {
+  throw new Error("Can't find jump to today container");
+}
+
+jumpToBtn.addEventListener("click", function handleJumpToTodayClick() {
+  const todayBtn = document.querySelector(".today");
+  if (todayBtn) {
+    todayBtn.scrollIntoView({ block: "center" });
+  }
+});
+
+const observer = new IntersectionObserver(function callback(entries) {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      jumpToContainer.classList.add("hidden");
+    } else {
+      console.log("fired");
+      jumpToContainer.classList.remove("hidden");
+    }
+  });
+});
+
+const todayBtn = document.querySelector(".today");
+if (todayBtn) {
+  observer.observe(todayBtn);
 }

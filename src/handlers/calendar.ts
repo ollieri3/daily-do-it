@@ -55,7 +55,11 @@ async function getCalendar(req: Request, res: Response, next: NextFunction) {
       }),
     };
   });
-  res.render("calendar", { months, userActivated });
+  res.render("calendar", {
+    months,
+    userActivated,
+    today: dayjs().format("YYYY-MM-DD"),
+  });
 }
 
 function home(_: Request, res: Response) {
