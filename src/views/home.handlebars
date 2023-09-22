@@ -2,90 +2,104 @@
   <link rel="stylesheet" href="/home.css" />
 {{/section}}
 
-<div
-  class="m-auto mt-10 flex max-w-7xl flex-wrap justify-center gap-16 md:mt-16 lg:mt-20"
->
+<div class="w-full md:p-5">
+  <div
+    class="m-auto mt-10 flex max-w-7xl flex-wrap justify-center gap-16 md:mt-16 lg:mt-20"
+  >
 
-  <section class="grow basis-2/5">
-    <div class="max-w-prose px-5 md:px-0">
-      <h1 class="text-3xl font-semibold md:text-5xl">Visualize, track and commit
-        to a habit daily
-      </h1>
+    <section class="grow basis-2/5">
+      <div class="m-auto max-w-prose px-5 md:px-0">
+        <h1 class="text-3xl font-semibold md:text-5xl">Visualize, track and
+          commit to a habit daily
+        </h1>
 
-      <p class="mt-6 text-xl text-gray-500">
-        Your personal gold star system, simply track your habit every day and
-        see your progress throughout the year.
-      </p>
+        <p class="mt-6 text-xl text-gray-500">
+          Your personal gold star system, simply track your habit every day and
+          see your progress throughout the year.
+        </p>
 
-      <a
-        class="mt-6 inline-block rounded border-gray-700 bg-emerald-700 px-4 py-3 text-white shadow-md transition-colors hover:bg-emerald-800"
-        href="/signup"
-      >Start tracking your habit now</a>
-    </div>
-  </section>
-
-  <div class="hidden md:block">
-    <figure class="flex flex-col items-center">
-      <div id="calendar">
-        {{#months}}
-          <div id="month">
-            <div id="month-name" class="text-xs font-bold">{{month}}</div>
-            <div id="days">
-              {{#days}}
-
-                {{#if isComplete}}
-                  <span
-                    id="day"
-                    style="--animation-order: {{animationOrder}}"
-                    class="day animate"
-                    data-date="{{date}}"
-                  >{{day}}</span>
-                {{else}}
-                  <span
-                    id="day"
-                    style="--animation-order: {{animationOrder}}"
-                    class="day"
-                    data-date="{{date}}"
-                  >{{day}}</span>
-                {{/if}}
-
-              {{/days}}
-            </div>
-          </div>
-        {{/months}}
+        <a
+          class="mt-6 inline-block rounded border-gray-700 bg-emerald-700 px-4 py-3 text-white shadow-md transition-colors hover:bg-emerald-800"
+          href="/signup"
+        >Start tracking your habit now</a>
       </div>
-      <figcaption
-        class="mt-5 flex items-baseline gap-1 text-center text-sm text-gray-500"
-      >
-        <svg
-          class="arrow-icon inline-block fill-gray-500"
-          width="14px"
-          height="14px"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 384 512"
-        ><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --><path
-            d="M32 448c-17.7 0-32 14.3-32 32s14.3 32 32 32l96 0c53 0 96-43 96-96l0-306.7 73.4 73.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 109.3 160 416c0 17.7-14.3 32-32 32l-96 0z"
-          /></svg>
-        What your year could look like.</figcaption>
-    </figure>
-  </div>
+    </section>
 
+    <div class="hidden md:block">
+      <figure class="flex flex-col items-center">
+        <div id="calendar">
+          {{#months}}
+            <div id="month">
+              <div id="month-name" class="text-xs font-bold">{{month}}</div>
+              <div id="days">
+                {{#days}}
+
+                  {{#if isComplete}}
+                    <span
+                      id="day"
+                      style="--animation-order: {{animationOrder}}"
+                      class="day animate"
+                      data-date="{{date}}"
+                    >{{day}}</span>
+                  {{else}}
+                    <span
+                      id="day"
+                      style="--animation-order: {{animationOrder}}"
+                      class="day"
+                      data-date="{{date}}"
+                    >{{day}}</span>
+                  {{/if}}
+
+                {{/days}}
+              </div>
+            </div>
+          {{/months}}
+        </div>
+        <figcaption
+          class="mt-5 flex items-baseline gap-1 text-center text-sm text-gray-500"
+        >
+          <svg
+            class="arrow-icon inline-block fill-gray-500"
+            width="14px"
+            height="14px"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 384 512"
+          ><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --><path
+              d="M32 448c-17.7 0-32 14.3-32 32s14.3 32 32 32l96 0c53 0 96-43 96-96l0-306.7 73.4 73.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0l-128 128c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 109.3 160 416c0 17.7-14.3 32-32 32l-96 0z"
+            /></svg>
+          What your year could look like.</figcaption>
+      </figure>
+
+    </div>
+  </div>
 </div>
 
-{{! TODO: Finish this section off }}
-{{!-- <section class="mt-20 bg-emerald-100">
-  <div class="m-auto max-w-7xl flex-col justify-between py-10">
-    <img
-      class="rounded shadow-md"
-      src="/img/everday-calendar-simone-giertz.webp"
-      width="450"
-      height="450"
-    />
-    <div class="max-w-prose basis-3/5">
-      <h2 class="text-2 xl font-medium">Inspired by the Everyday Calendar</h2>
-      {{! TODO: Fill this out }}
-      <p></p>
+<section class="mb-20 mt-20 bg-emerald-50">
+  <div
+    class="m-auto flex max-w-7xl flex-col items-center justify-center px-5 py-10 lg:flex-row lg:gap-16"
+  >
+    <figure class="md:basis-2/5">
+      <img
+        class="rounded shadow-md"
+        alt="A photograph of Simone Giertz, reaching out to press on a physical wall mounted Everyday Calendar"
+        src="/img/everday-calendar-simone-giertz.webp"
+        width="450"
+        height="450"
+      />
+    </figure>
+
+    <div class="mt-12 w-full max-w-prose md:basis-3/5">
+      <h2 class="mb-6 text-2xl font-medium">Inspired by the Everyday Calendar</h2>
+
+      {{! TODO: Add links to Simone and the Everyday calendar here }}
+      <p class="mb-2">Created by
+        <a href="">Simone Giertz</a>, the Everyday Calendar is a physical
+        calendar, designed to help you keep track of a habit every day.</p>
+      <p class="mb-2">Daily Do It draws inspiration from Simone's creation, with
+        a similar, but still simple interface, with the added benefit of taking
+        your habit tracking wherever you go by being available online.
+      </p>
     </div>
 
   </div>
-</section> --}}
+</section>
