@@ -54,6 +54,19 @@
   z-index: -1;
 }
 
+/* styles to apply if the user's settings are set to reduced motion */
+@media (prefers-reduced-motion) {
+  /* Effectively disables the calendar animation for users that prefer reduced motion */
+  .day.animate {
+    animation-duration: 0ms;
+    animation-delay: 0ms;
+  }
+  .day.animate::before {
+    animation-duration: 0ms;
+    animation-delay:0ms
+  }
+}
+
 @keyframes animateInMain {
   0% {
     background: #cfcfcf;

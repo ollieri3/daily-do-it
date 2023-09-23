@@ -81,28 +81,3 @@
     grid-template-columns: repeat(1, [col-start] 1fr);
   }
 }
-
-
-/* Experimental Portrait Mode */
-/* @media (orientation: portrait) {
-  #calendar {
-
-    grid-template-columns: repeat(12, [col-start] 1fr);
-  }
-
-  #days {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .day {
-    width: 50px;
-    margin: 5px;
-    height: calc(50px * 1.1547);
-  }
-
-  body {
-    background: beige;
-  }
-} */
