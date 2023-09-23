@@ -57,7 +57,8 @@ async function getCalendar(req: Request, res: Response, next: NextFunction) {
   });
   res.render("calendar", {
     months,
-    userActivated,
+    userNotActive: userActivated === false,
+    userHasNoDaysComplete: userDays.length === 0,
     today: dayjs().format("YYYY-MM-DD"),
   });
 }
