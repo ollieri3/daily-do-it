@@ -6,7 +6,7 @@
   <script defer src="/calendar.js"></script>
 {{/section}}
 
-<div class="w-full p-5">
+<div class="flex w-full flex-col p-5">
 
   {{! Notice Banners }}
   {{#if userNotActive}}
@@ -35,7 +35,7 @@
             {{#if isComplete}}
               <button
                 id="{{date}}"
-                class="day complete"
+                class="day complete {{#if isToday}}today{{/if}}"
                 data-date="{{date}}"
                 data-is-complete="{{isComplete}}"
               >{{day}}</button>
@@ -58,17 +58,17 @@
       </div>
     {{/months}}
   </div>
-</div>
 
-{{! Sticky button to jump to day }}
-<div
-  id="jump-to-today-container"
-  style="bottom: 0vmax"
-  class="sticky flex w-full justify-center bg-white bg-opacity-80 py-4 backdrop-blur-sm md:invisible"
->
-  <button
-    id="jump-to-today"
-    href="#{{today}}"
-    class="rounded-lg bg-blue-600 px-4 py-3 font-semibold text-blue-100"
-  >Jump to today</button>
+  {{! Sticky button to jump to day }}
+  <div
+    id="jump-to-today-container"
+    class="sticky bottom-0 flex w-full justify-center bg-white bg-opacity-80 py-4 backdrop-blur-sm md:invisible invisible"
+  >
+    <button
+      id="jump-to-today"
+      href="#{{today}}"
+      class="rounded-lg bg-blue-600 px-4 py-3 font-semibold text-blue-100"
+    >Jump to today</button>
+  </div>
+
 </div>
