@@ -97,10 +97,9 @@ jumpToBtn.addEventListener("click", function handleJumpToTodayClick() {
 const observer = new IntersectionObserver(function callback(entries) {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      jumpToContainer.classList.add("hidden");
+      jumpToContainer.classList.add("invisible");
     } else {
-      console.log("fired");
-      jumpToContainer.classList.remove("hidden");
+      jumpToContainer.classList.remove("invisible");
     }
   });
 });
