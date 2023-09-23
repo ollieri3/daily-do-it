@@ -76,6 +76,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         "img-src": ["'self'", "data:", "img.shields.io"], // Allow img.shields.io for footer badges
+        "script-src": ["'self'", "cdn.usefathom.com"], // Allow fathom analytics
       },
     },
   }),
