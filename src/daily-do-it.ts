@@ -249,6 +249,9 @@ app.use((req, res, next) => {
   const todaysDate = dayjs().get("date");
   res.locals.todaysDate = todaysDate;
 
+  // Determine whether to initiate analytics
+  res.locals.enableAnalytics = ENV.DEPLOYMENT === "prod";
+
   // Provide flash messages to templates
   if (req.session.flash) {
     res.locals.flash = req.session.flash;

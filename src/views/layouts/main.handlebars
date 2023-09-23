@@ -14,6 +14,11 @@
 
     {{!-- TODO:  add apple-touch and manifest icons https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs --}}
     {{{_sections.head}}}
+
+    {{#if enableAnalytics}}
+      <script src="https://cdn.usefathom.com/script.js" data-site="FGTXHOIY" defer></script>
+    {{/if}}
+
     {{{_sections.scripts}}}
   </head>
 
