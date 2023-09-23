@@ -58,3 +58,10 @@ Credit: Mirko Akov: https://codepen.io/mupkoo/pen/YgddgB */
     cursor: not-allowed;
   }
 }
+
+.habits-background {
+  background-image: url('img/habits-grid.svg');
+  background-repeat: repeat;
+  background-position-x: 100px;
+  background-position-y: 100px;
+}
