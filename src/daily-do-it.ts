@@ -15,6 +15,7 @@ import helmet from "helmet";
 import validator from "validator";
 import z from "zod";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import expressSitemapXML from "express-sitemap-xml";
 
 import { ENV } from "./lib/environment.js";
 import { TRUSTED_IPS_CSV } from "./lib/proxy.js";
@@ -283,6 +284,12 @@ app.use((req, res, next) => {
   // Continue as normal
   next();
 });
+
+app.use(
+  expressSitemapXML(() => {
+    return ["/", "/signin", "/signup", "/privacy-policy"];
+  }, "https://dailydoit.online"),
+);
 
 addRoutes(app);
 
