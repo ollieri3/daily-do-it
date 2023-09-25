@@ -4,6 +4,7 @@
   justify-content: center;
   gap: 12px;
   min-width: 600px;
+  background-color: white;
 }
 
 :root {
