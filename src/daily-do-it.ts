@@ -36,6 +36,14 @@ Sentry.init({
   environment: ENV.DEPLOYMENT,
 });
 
+if (ENV.DEPLOYMENT === "prod") {
+  process.on("uncaughtException", (err) => {
+    console.error(err.stack);
+    Sentry.captureException(err);
+    process.exit(1);
+  });
+}
+
 const Tokens = new csrf();
 
 dayjs.extend(localeData);
