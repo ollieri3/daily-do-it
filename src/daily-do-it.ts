@@ -16,6 +16,7 @@ import validator from "validator";
 import z from "zod";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import expressSitemapXML from "express-sitemap-xml";
+import * as Sentry from "@sentry/node";
 
 import { ENV } from "./lib/environment.js";
 import { TRUSTED_IPS_CSV } from "./lib/proxy.js";
@@ -28,6 +29,12 @@ declare module "express-session" {
     flash: any; //TODO: Make this sensible
   }
 }
+
+Sentry.init({
+  dsn: ENV.SENTRY_DSN,
+  enabled: ENV.DEPLOYMENT === "prod",
+  environment: ENV.DEPLOYMENT,
+});
 
 const Tokens = new csrf();
 
@@ -45,6 +52,8 @@ if (ENV.DEPLOYMENT === "prod") {
     `loopback, linklocal, uniquelocal, ${TRUSTED_IPS_CSV}`,
   );
 }
+
+app.use(Sentry.Handlers.requestHandler());
 
 // Static files
 app.use(

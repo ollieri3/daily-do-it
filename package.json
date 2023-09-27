@@ -22,6 +22,7 @@
     "node": "18.16.1"
   },
   "dependencies": {
+    "@sentry/node": "^7.72.0",
     "body-parser": "^1.20.2",
     "connect-pg-simple": "^9.0.0",
     "csrf": "^3.1.0",

@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import * as Sentry from "@sentry/node";
 
 import { main } from "./handlers/main.js";
 import { auth, signInLimiter, signUpLimiter } from "./handlers/auth.js";
@@ -26,6 +27,9 @@ export function addRoutes(app: Express) {
   app.delete("/day", isAuthenticated, calendar.removeDay);
 
   app.get("/error-test", error.errorTest);
+  
   app.use(error.notFound);
+
+  app.use(Sentry.Handlers.errorHandler());
   app.use(error.serverError);
 }

@@ -13,10 +13,12 @@ const serverError: ErrorRequestHandler = (error, req, res, next) => {
   if (ENV.DEPLOYMENT === "dev") {
     return res.render("error", {
       // Only show stack trace in dev
+      errorId: "sentry" in res ? res.sentry : undefined,
       stack: error instanceof Error ? error.stack : undefined
     });
   } else {
     return res.render("error", {
+      errorId: "sentry" in res ? res.sentry : undefined,
       error: error instanceof Error ? error.message : error,
     });
   }

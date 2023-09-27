@@ -7,7 +7,7 @@
   <section class="m-auto flex max-w-7xl justify-center pt-20">
     <div class="rounded-md bg-white p-4 text-center">
       <h1 class="text-5xl text-red-500">An Unexpected Error Occurred</h1>
-
+      <p class="mt-5"><code class="bg-black text-orange-300 p-1 rounded-md">{{errorId}}</code></p>
       {{#if error}}
         <pre class="m-auto mt-10 max-w-prose bg-slate-100 p-4">{{error}}</pre>
       {{/if}}
