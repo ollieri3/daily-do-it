@@ -9,6 +9,7 @@ import { isAuthenticated } from "./middleware/auth.js";
 
 export function addRoutes(app: Express) {
   app.get("/", main.home);
+  app.get("/privacy-policy", main.privacyPolicy);
 
   app.get("/oauth2/redirect/google", auth.googleSignInRedirect);
   app.get("/signin/federated/google", auth.googleSignIn);
@@ -24,8 +25,7 @@ export function addRoutes(app: Express) {
   app.post("/day", isAuthenticated, calendar.submitDay);
   app.delete("/day", isAuthenticated, calendar.removeDay);
 
-  app.get("/privacy-policy", main.privacyPolicy);
-
+  app.get("/error-test", error.errorTest);
   app.use(error.notFound);
   app.use(error.serverError);
 }
