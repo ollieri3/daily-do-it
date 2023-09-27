@@ -120,7 +120,7 @@ async function handleSignUp(req: Request, res: Response, next: NextFunction) {
 
       // Account activation
       const token = randomBytes(16).toString("hex");
-      const expires = dayjs().add(6, "hours").toISOString();
+      const expires = dayjs().add(2, "days").toISOString();
 
       try {
         await pool.query("BEGIN");
