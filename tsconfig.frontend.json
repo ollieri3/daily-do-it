@@ -5,7 +5,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "dist/public",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
