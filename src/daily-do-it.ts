@@ -23,6 +23,7 @@ import { TRUSTED_IPS_CSV } from "./lib/proxy.js";
 import { addRoutes } from "./routes.js";
 import { pool } from "./lib/db.js";
 import { emailSchema, passwordSchema } from "./helpers/validations.js";
+import { notify } from "./lib/notify.js";
 
 declare module "express-session" {
   interface SessionData {
@@ -231,6 +232,7 @@ passport.use(
             [userQuery.rows[0].id, profile.provider, profile.id],
           );
           await pool.query("COMMIT");
+          await notify.onSignup();
           done(null, userQuery.rows[0]);
         }
       } catch (err) {

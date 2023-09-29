@@ -25,6 +25,21 @@ async function send({ to, subject, html }: SendOptions) {
   });
 }
 
+type SendPlainOptions = {
+  to: string;
+  subject: string;
+  text: string;
+}
+async function sendPlain({to, subject, text} : SendPlainOptions) {
+  await transporter.sendMail({
+    from: '"Daily Do It" <support@dailydoit.online>',
+    to,
+    subject,
+    text,
+  });
+}
+
 export const mail = {
   send,
+  sendPlain
 };

@@ -23,7 +23,8 @@ const envSchema = z.object({
   EMAIL_PASSWORD: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
-  SENTRY_DSN: z.string()
+  SENTRY_DSN: z.string(),
+  NOTIFICATION_EMAIL: z.string(),
 });
 
 type Env = z.infer<typeof envSchema>;
@@ -41,7 +42,8 @@ export const ENV: Env = {
   EMAIL_PASSWORD: process.env.EMAIL_PASSWORD as string,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID as string,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET as string,
-  SENTRY_DSN: process.env.SENTRY_DSN as string
+  SENTRY_DSN: process.env.SENTRY_DSN as string,
+  NOTIFICATION_EMAIL: process.env.NOTIFICATION_EMAIL as string,
 } as const;
 
 envSchema.parse(ENV);

@@ -10,6 +10,7 @@ import { pool } from "../lib/db.js";
 import { user } from "../lib/user.js";
 import { emailSchema, passwordSchema } from "../helpers/validations.js";
 import { ENV } from "../lib/environment.js";
+import { notify } from "../lib/notify.js";
 
 function signIn(req: Request, res: Response) {
   let errors;
@@ -141,7 +142,13 @@ async function handleSignUp(req: Request, res: Response, next: NextFunction) {
         return next(err);
       }
 
-      await user.sendAccountConfirmationEmail(emailNormalized, token);
+      const sendAccountConfirmationEmailPromise = user.sendAccountConfirmationEmail(emailNormalized, token);
+      const sendSignupNotificationPromise = notify.onSignup();
+
+      await Promise.allSettled([
+        sendAccountConfirmationEmailPromise,
+        sendSignupNotificationPromise,
+      ])
 
       // Query user and sign them in
       const userResult = await pool.query(
