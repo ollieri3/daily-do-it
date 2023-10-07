@@ -10,11 +10,8 @@ import { test, expect } from "@playwright/test";
 test("Sign in with Email & Password", async ({ page }) => {
   await page.goto("/signin");
 
-  await page.getByLabel("Email").click();
-  await page.keyboard.type(credentials.email);
-
-  await page.getByLabel("Password").click();
-  await page.keyboard.type(credentials.password);
+  await page.getByLabel("Email").fill(credentials.email);
+  await page.getByLabel("Password").fill(credentials.password);
 
   await page.getByRole("button", { name: "Sign in" }).click();
 
