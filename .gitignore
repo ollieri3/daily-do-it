@@ -106,3 +106,6 @@ dist
 db/data/*
 
 .ds_store
+/test-results/
+/playwright-report/
+/playwright/.cache/
