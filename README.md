@@ -8,23 +8,31 @@
 
 ---
 
+## 💬 Introduction
+
+This repository contains the source code for the [Daily Do It](https://dailydoit.online/) application. A simple habit tracking tool.
+
+**You can read more about Daily Do It on [the project homepage](https://dailydoit.online/).**
+
+## 🏃 Getting up and running
+
+ℹ️ Make certain you have a compatible version of NodeJS installed, you can reference the `engines` field within the [package.json](package.json) to see the currently targeted version.
+
+1. Make a copy of [.env.example](.env.example), renaming it to `.env`
+2. Run `$ npm install` to install the project dependencies
+3. Use `$ npm start` to run the development server
+4. `$ docker-compose up db` to run the PostgreSQL database
+
 ## 💻 Tech Stack
 
 Here's a brief high-level overview of the tech stack Daily Do It uses:
 
 - It's a NodeJS with Express server rendered web application
-- Using Typescript for both server code and Frontend scripts
-- Handlebars template engine for server rendered templates
-- PostgreSQL Database for persistent storage
+- Written in Typescript for both the server and client side scripts
+- Utilizes the Handlebars template engine for server rendered templates
+- PostgreSQL database for persistent storage
 - Tailwind CSS for Frontend Styling
-
-## Database setup
-
-ℹ️ First time setup? run the [setup script](/db/setup.js) once the db is up.
-
-Start: `$ docker compose up db`
-
-Interactive psql: `$ docker compose exec -u postgres -it db psql`
+- Docker with Docker Compose for local PostgreSQL and Mailhog management.
 
 ## ℹ️ License
 
