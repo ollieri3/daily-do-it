@@ -2,11 +2,21 @@
 
 <div align='center'>
   <h1><a href="https://dailydoit.online/">Daily Do It</a></h1>
-  <h2>Simple daily habit tracking</h2>
+  <p>Simple daily habit tracking</p>
   <img alt="GitHub" src="https://img.shields.io/github/license/ollieri3/daily-do-it">
 </div>
 
 ---
+
+## 💻 Tech Stack
+
+Here's a brief high-level overview of the tech stack Daily Do It uses:
+
+- It's a NodeJS with Express server rendered web application
+- Using Typescript for both server code and Frontend scripts
+- Handlebars template engine for server rendered templates
+- PostgreSQL Database for persistent storage
+- Tailwind CSS for Frontend Styling
 
 ## Database setup
 
@@ -16,6 +26,6 @@ Start: `$ docker compose up db`
 
 Interactive psql: `$ docker compose exec -u postgres -it db psql`
 
-## License
+## ℹ️ License
 
 [MIT](LICENSE)
