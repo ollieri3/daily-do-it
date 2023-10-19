@@ -2,11 +2,8 @@
 
 <div align='center'>
   <h1><a href="https://dailydoit.online/">Daily Do It</a></h1>
-  <p>Simple daily habit tracking</p>
   <img alt="GitHub" src="https://img.shields.io/github/license/ollieri3/daily-do-it">
 </div>
-
----
 
 ## 💬 Introduction
 
