@@ -6,8 +6,6 @@
   <img alt="GitHub" src="https://img.shields.io/github/license/ollieri3/daily-do-it">
 </div>
 
----
-
 ## Database setup
 
 ℹ️ First time setup? run the [setup script](/db/setup.js) once the db is up.
