@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import dayjs from "dayjs";
 
-function home(req: Request, res: Response) {
+export function home(req: Request, res: Response) {
   if (req.user) {
     res.redirect("/calendar");
     return;
@@ -30,16 +30,6 @@ function home(req: Request, res: Response) {
   });
 
   res.render("home", {
-    username: (req.user as any)?.email,
     months,
   });
 }
-
-function privacyPolicy(_: Request, res: Response) {
-  return res.render("privacy-policy");
-}
-
-export const main = {
-  home,
-  privacyPolicy,
-};

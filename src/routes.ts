@@ -1,35 +1,44 @@
 import type { Express } from "express";
-import * as Sentry from "@sentry/node";
 
-import { main } from "./handlers/main.js";
-import { auth, signInLimiter, signUpLimiter } from "./handlers/auth.js";
-import { calendar } from "./handlers/calendar.js";
-import { error } from "./handlers/error.js";
+import { home } from "./controllers/home.js";
+import { privacyPolicy } from "./controllers/privacy-policy.js";
+import { signInPage } from "./controllers/sign-in.js";
+import { signOut } from "./controllers/sign-out.js";
+import { signUpPage, signUpForm } from "./controllers/sign-up.js";
+import { activate } from "./controllers/activate.js";
+import {
+  getCalendar,
+  redirectToLatestCalendar,
+} from "./controllers/calendar.js";
+import { removeDay, submitDay } from "./controllers/day.js";
+import { errorTest } from "./controllers/error.js";
 
-import { isAuthenticated } from "./middleware/auth.js";
+import {
+  protect,
+  emailPassSignIn,
+  googleAuthenticate,
+  googleSignIn,
+  signInLimiter,
+  signUpLimiter,
+} from "./middleware/auth.js";
 
 export function addRoutes(app: Express) {
-  app.get("/", main.home);
-  app.get("/privacy-policy", main.privacyPolicy);
+  app.get("/", home);
+  app.get("/privacy-policy", privacyPolicy);
 
-  app.get("/oauth2/redirect/google", auth.googleSignInRedirect);
-  app.get("/signin/federated/google", auth.googleSignIn);
-  app.get("/signin", auth.signIn);
-  app.post("/signin", signInLimiter, auth.handleSignIn);
-  app.post("/signout", isAuthenticated, auth.handleSignOut);
-  app.get("/signup", auth.signUp);
-  app.post("/signup", signUpLimiter, auth.handleSignUp);
-  app.get("/activate/:token", auth.activate);
+  app.get("/oauth2/redirect/google", googleAuthenticate);
+  app.get("/signin/federated/google", googleSignIn);
+  app.get("/signin", signInPage);
+  app.post("/signin", signInLimiter, emailPassSignIn);
+  app.post("/signout", protect, signOut);
+  app.get("/signup", signUpPage);
+  app.post("/signup", signUpLimiter, signUpForm);
+  app.get("/activate/:token", activate);
 
-  app.get("/calendar/:year", isAuthenticated, calendar.getCalendar);
-  app.get("/calendar", isAuthenticated, calendar.home);
-  app.post("/day", isAuthenticated, calendar.submitDay);
-  app.delete("/day", isAuthenticated, calendar.removeDay);
+  app.get("/calendar/:year", protect, getCalendar);
+  app.get("/calendar", protect, redirectToLatestCalendar);
+  app.post("/day", protect, submitDay);
+  app.delete("/day", protect, removeDay);
 
-  app.get("/error-test", error.errorTest);
-  
-  app.use(error.notFound);
-
-  app.use(Sentry.Handlers.errorHandler());
-  app.use(error.serverError);
+  app.get("/error-test", errorTest);
 }

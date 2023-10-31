@@ -1,3 +1,16 @@
+import type { Express } from "express";
+
+import { ENV } from "../lib/environment.js";
+
+export function configureProxySupport(app: Express) {
+  if (ENV.DEPLOYMENT === "prod") {
+    app.set(
+      "trust proxy",
+      `loopback, linklocal, uniquelocal, ${TRUSTED_IPS_CSV}`,
+    );
+  }
+}
+
 const TRUSTED_IPS = [
   // Cloudflare IPv4 IPS
   "103.21.244.0/22",
@@ -26,4 +39,4 @@ const TRUSTED_IPS = [
   "2606:4700::/32",
 ];
 
-export const TRUSTED_IPS_CSV = TRUSTED_IPS.join(",");
+const TRUSTED_IPS_CSV = TRUSTED_IPS.join(",");
