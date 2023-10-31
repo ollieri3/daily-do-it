@@ -7,32 +7,38 @@ type CreateUserInput = {
   activationToken: string;
   activationTokenExpiry: string;
 };
+
 async function create(
   user: CreateUserInput,
 ): Promise<{ id: string; email: string }> {
+  const client = await pool.connect();
   try {
     // Start a transaction
-    await pool.query("BEGIN");
-
-    const userInsertionResult = await pool.query<{ id: string; email: string }>(
+    await client.query("BEGIN");
+    const userInsertionResult = await client.query<{
+      id: string;
+      email: string;
+    }>(
       `INSERT INTO users(email, hashed_password, salt) VALUES($1, $2, $3) RETURNING id, email`,
       [user.email, user.password, user.salt],
     );
-
     const newUser = userInsertionResult.rows[0];
 
-    await pool.query(
+    await client.query(
       `INSERT INTO activation_tokens (user_id, token, expires) VALUES($1, $2, $3)`,
       [newUser.id, user.activationToken, user.activationTokenExpiry],
     );
 
     // Commit transaction
-    await pool.query("COMMIT");
+    await client.query("COMMIT");
     return { id: newUser.id, email: newUser.email };
   } catch (err) {
     // Rollback transaction on failure
-    await pool.query("ROLLBACK");
+    console.error(err);
+    await client.query("ROLLBACK");
     throw err;
+  } finally {
+    client.release();
   }
 }
 

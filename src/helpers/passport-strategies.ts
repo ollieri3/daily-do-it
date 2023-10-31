@@ -116,30 +116,39 @@ function setupGoogleStrategy() {
           );
 
           if (federatedCredentialsQuery.rowCount > 0) {
-            //TODO: Add better error handling
             // User has logged in with Google before
             const userQuery = await pool.query(
               `SELECT id, email FROM users WHERE id = $1`,
               [federatedCredentialsQuery.rows[0].user_id],
             );
-            done(null, userQuery.rows[0]);
-          } else {
-            // Create new federated_credential & user
-            await pool.query("BEGIN");
-            const userQuery = await pool.query(
-              `INSERT INTO users(email, active) VALUES($1, true) RETURNING id, email`,
-              [(profile.emails as any)[0].value], //TODO: Improve this
-            );
-            await pool.query(
-              `INSERT INTO federated_credentials(user_id, provider, provider_user_id) VALUES($1, $2, $3)`,
-              [userQuery.rows[0].id, profile.provider, profile.id],
-            );
-            await pool.query("COMMIT");
-            await notify.onSignup();
-            done(null, userQuery.rows[0]);
+            return done(null, userQuery.rows[0]);
           }
         } catch (err) {
           console.log("err: ", err);
+          done(err as Error);
+        }
+
+        // Create new federated_credential & user
+        const client = await pool.connect();
+        try {
+          await client.query("BEGIN");
+          const userQuery = await client.query(
+            `INSERT INTO users(email, active) VALUES($1, true) RETURNING id, email`,
+            [(profile.emails as any)[0].value], //TODO: Improve this
+          );
+          await client.query(
+            `INSERT INTO federated_credentials(user_id, provider, provider_user_id) VALUES($1, $2, $3)`,
+            [userQuery.rows[0].id, profile.provider, profile.id],
+          );
+          await client.query("COMMIT");
+          await notify.onSignup();
+          return done(null, userQuery.rows[0]);
+        } catch (err) {
+          await client.query("ROLLBACK");
+          console.log("err: ", err);
+          done(err as Error);
+        } finally {
+          client.release();
         }
       },
     ),
