@@ -30,6 +30,7 @@ Here's a brief high-level overview of the tech stack Daily Do It uses:
 - PostgreSQL database for persistent storage
 - Tailwind CSS for Frontend Styling
 - Docker with Docker Compose for local PostgreSQL and Mailhog management.
+- Playwright for end-to-end testing
 
 ## ℹ️ License
 
