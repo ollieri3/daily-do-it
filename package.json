@@ -9,6 +9,8 @@
     "build": "npm run build:clean && npm run build:copy && npm run tailwind && npx tsc && npx tsc --project tsconfig.frontend.json",
     "build:clean": "rm -rf dist",
     "build:copy": "copyfiles -u 1 -e 'src/public/main.css' -e 'src/public/*.ts' 'src/views/**/*.*' 'src/public/**/*.*' dist/",
+    "ts:check": "npx tsc --noEmit",
+    "ts:check:fe": "npx tsc --noEmit --project tsconfig.frontend.json",
     "tailwind": "tailwindcss -i ./src/public/main.css -o ./dist/public/main.css",
     "tailwind:watch": "npm run tailwind -- --watch"
   },
