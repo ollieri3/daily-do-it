@@ -12,7 +12,8 @@
     "ts:check": "npx tsc --noEmit",
     "ts:check:fe": "npx tsc --noEmit --project tsconfig.frontend.json",
     "tailwind": "tailwindcss -i ./src/public/main.css -o ./dist/public/main.css",
-    "tailwind:watch": "npm run tailwind -- --watch"
+    "tailwind:watch": "npm run tailwind -- --watch",
+    "prettier:check": "prettier . --check"
   },
   "author": "Oliver Ridsdale",
   "license": "ISC",

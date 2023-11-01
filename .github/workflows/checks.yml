@@ -13,8 +13,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Type Check
+      - name: Typescript
         run: npm run ts:check
 
-      - name: Type Check (FE)
+      - name: Typescript FE
         run: npm run ts:check:fe
+
+      - name: Prettier Check
+        run: npm run prettier:check
