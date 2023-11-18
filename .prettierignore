@@ -4,3 +4,9 @@ package-lock.json
 
 ## There's a weird bug with handlebars templates where prettier will remove the DOCTYPE tag
 src/views/layouts/main.handlebars
+
+## These files use partials, these are not supported by prettier
+src/views/activation_success.handlebars
+src/views/partials/formpage.handlebars
+src/views/signin.handlebars
+src/views/signup.handlebars

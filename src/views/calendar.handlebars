@@ -34,12 +34,21 @@
         <div id="days">
           {{#days}}
             {{#if isComplete}}
-              <button
-                id="{{date}}"
-                class="day complete {{#if isToday}}today{{/if}}"
-                data-date="{{date}}"
-                data-is-complete="{{isComplete}}"
-              >{{day}}</button>
+              {{#if isToday}}
+                <button
+                  id="{{date}}"
+                  class="day complete today"
+                  data-date="{{date}}"
+                  data-is-complete="true"
+                >{{day}}</button>
+              {{else}}
+                <button
+                  id="{{date}}"
+                  class="day complete"
+                  data-date="{{date}}"
+                  data-is-complete="true"
+                >{{day}}</button>
+              {{/if}}
             {{else if isToday}}
               <button
                 id="{{date}}"
@@ -63,7 +72,7 @@
   {{! Sticky button to jump to day }}
   <div
     id="jump-to-today-container"
-    class="sticky bottom-0 flex w-full justify-center bg-white bg-opacity-80 py-4 backdrop-blur-sm md:invisible invisible"
+    class="invisible sticky bottom-0 flex w-full justify-center bg-white bg-opacity-80 py-4 backdrop-blur-sm md:invisible"
   >
     <button
       id="jump-to-today"
