@@ -12,7 +12,7 @@
 }
 
 .arrow-icon {
-  transform: scaleX(-1)
+  transform: scaleX(-1);
 }
 
 .day {
@@ -64,7 +64,7 @@
   }
   .day.animate::before {
     animation-duration: 0ms;
-    animation-delay:0ms
+    animation-delay: 0ms;
   }
 }
 

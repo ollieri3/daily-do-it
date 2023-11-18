@@ -8,14 +8,14 @@ export function notFound(req: Request, res: Response) {
 }
 
 export const serverError: ErrorRequestHandler = (error, req, res, next) => {
-  console.error(error);  
+  console.error(error);
   res.status(500);
 
   if (ENV.DEPLOYMENT === "dev") {
     return res.render("error", {
       // Only show stack trace in dev
       errorId: "sentry" in res ? res.sentry : undefined,
-      stack: error instanceof Error ? error.stack : undefined
+      stack: error instanceof Error ? error.stack : undefined,
     });
   } else {
     return res.render("error", {

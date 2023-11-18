@@ -10,3 +10,6 @@ src/views/activation_success.handlebars
 src/views/partials/formpage.handlebars
 src/views/signin.handlebars
 src/views/signup.handlebars
+
+## Email templates are a mess, don't even attempt to format them
+src/views/email/*

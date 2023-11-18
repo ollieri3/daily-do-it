@@ -32,7 +32,7 @@
   outline: 0;
 }
 
-.day:focus-visible {  
+.day:focus-visible {
   box-shadow: inset 0px 1px 20px 10px #0068ff;
 }
 

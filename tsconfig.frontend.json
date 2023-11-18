@@ -1,7 +1,5 @@
 {
-  "include": [
-    "src/public/**/*"
-  ],
+  "include": ["src/public/**/*"],
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",

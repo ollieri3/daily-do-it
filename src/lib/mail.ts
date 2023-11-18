@@ -29,8 +29,8 @@ type SendPlainOptions = {
   to: string;
   subject: string;
   text: string;
-}
-async function sendPlain({to, subject, text} : SendPlainOptions) {
+};
+async function sendPlain({ to, subject, text }: SendPlainOptions) {
   await transporter.sendMail({
     from: '"Daily Do It" <support@dailydoit.online>',
     to,
@@ -41,5 +41,5 @@ async function sendPlain({to, subject, text} : SendPlainOptions) {
 
 export const mail = {
   send,
-  sendPlain
+  sendPlain,
 };
