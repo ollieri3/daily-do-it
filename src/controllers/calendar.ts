@@ -17,10 +17,19 @@ export async function getCalendar(
     });
     paramSchema.parse(req.params.year);
 
-    const [userActivated, userDays] = await Promise.all([
-      user.isActive((req.user as any).id),
-      day.getAllForUserInYear((req.user as any).id, req.params.year),
-    ]);
+    const [userActivated, userDays, previousYearDays, nextYearDays] =
+      await Promise.all([
+        user.isActive((req.user as any).id),
+        day.getAllForUserInYear((req.user as any).id, req.params.year),
+        day.getAllForUserInYear(
+          (req.user as any).id,
+          `${parseInt(req.params.year) - 1}`,
+        ),
+        day.getAllForUserInYear(
+          (req.user as any).id,
+          `${parseInt(req.params.year) + 1}`,
+        ),
+      ]);
 
     const months = dayjs.monthsShort().map((month, index) => {
       const monthDate = dayjs(new Date(+req.params.year, index));
@@ -46,6 +55,12 @@ export async function getCalendar(
       userNotActive: userActivated === false,
       userHasNoDaysComplete: userDays.length === 0,
       today: dayjs().format("YYYY-MM-DD"),
+      year: req.params.year,
+      prevYear: parseInt(req.params.year) - 1,
+      nextYear: parseInt(req.params.year) + 1,
+      showYearNav: previousYearDays.length > 0 || nextYearDays.length > 0,
+      hidePrevYearLink: previousYearDays.length < 1,
+      hideNextYearLink: nextYearDays.length < 1,
     });
   } catch (err) {
     next(err);
