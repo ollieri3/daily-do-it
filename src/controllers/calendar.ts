@@ -45,6 +45,8 @@ export async function getCalendar(
               dayjs(day.date).isSame(monthDate.date(i + 1)),
             ),
             isToday: today.isSame(monthDate.date(i + 1), "day"),
+            isPast: monthDate.date(i + 1).isBefore(today, "day"),
+            isFuture: monthDate.date(i + 1).isAfter(today, "day"),
           };
         }),
       };

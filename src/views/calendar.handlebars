@@ -55,6 +55,13 @@
                 class="day today"
                 data-date="{{date}}"
               >{{day}}</button>
+            {{else if isFuture}}
+              <button
+                id="{{date}}"
+                disabled
+                class="day"
+                data-date="{{date}}"
+              >{{day}}</button>
             {{else}}
               <button
                 id="{{date}}"

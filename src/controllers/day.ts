@@ -17,6 +17,15 @@ export async function submitDay(
       return;
     }
 
+    if (dayjs(req.body.date).isAfter(dayjs(), "day")) {
+      res.statusCode = 422;
+      res.json({
+        success: false,
+        message: "Date is in the future",
+      });
+      return;
+    }
+
     if (await day.exists(req.body.date, (req.user as any).id)) {
       res.statusCode = 500;
       res.json({ success: false, message: "Date entry already exists" });
