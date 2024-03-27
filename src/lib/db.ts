@@ -8,3 +8,7 @@ export const pool = new pg.Pool({
   password: ENV.DB_PASSWORD,
   port: ENV.DB_PORT,
 });
+
+pool.on("error", (err) => {
+  console.error(err);
+});

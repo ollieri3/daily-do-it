@@ -23,6 +23,7 @@ import {
 import { configureHandlebars } from "./helpers/configure-handlebars.js";
 import { configureProxySupport } from "./helpers/proxy.js";
 import { configureErrorMonitoring } from "./helpers/configure-error-monitoring.js";
+import { dbConnectionTest } from "./middleware/db-connection-test.js";
 
 configureErrorMonitoring();
 
@@ -38,6 +39,7 @@ app.use(Sentry.Handlers.requestHandler());
 app.use(
   express.static(fileURLToPath(new URL(".", import.meta.url) + "public")),
 );
+app.use(dbConnectionTest);
 app.use(sessionMiddleware);
 app.use(passport.session());
 app.use(helmetMiddleware);
