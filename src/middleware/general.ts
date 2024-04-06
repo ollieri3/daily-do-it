@@ -9,7 +9,7 @@ export const helmetMiddleware = helmet({
     directives: {
       "img-src": ["'self'", "data:", "img.shields.io"], // Allow img.shields.io for footer badges
       "script-src": ["'self'", "*.cloudflareinsights.com"], // Allow Cloudflare analytics
-      "connect-src": ["'self'", "*.cloudflareinsights.com"],
+      "connect-src": ["'self'", "cloudflareinsights.com"],
     },
   },
 });
