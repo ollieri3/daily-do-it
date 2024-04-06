@@ -7,8 +7,8 @@ import expressSitemapXML from "express-sitemap-xml";
 export const helmetMiddleware = helmet({
   contentSecurityPolicy: {
     directives: {
-      "img-src": ["'self'", "data:", "img.shields.io", "cdn.usefathom.com"], // Allow img.shields.io for footer badges
-      "script-src": ["'self'", "cdn.usefathom.com"], // Allow fathom analytics
+      "img-src": ["'self'", "data:", "img.shields.io"], // Allow img.shields.io for footer badges
+      "script-src": ["'self'", "static.cloudflareinsights.com"], // Allow Cloudflare analytics
     },
   },
 });
