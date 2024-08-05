@@ -6,7 +6,7 @@ services:
     volumes:
       - ./db/data:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: secret
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: dailydoit
   mailhog:
     image: mailhog/mailhog
