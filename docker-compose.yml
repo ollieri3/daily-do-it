@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres:15.3
+    restart: unless-stopped
     ports:
       - 5432:5432
     volumes:
