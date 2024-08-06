@@ -1,1 +1,1 @@
-Sitemap: https://dailydoit.online/sitemap.xml
+Sitemap: https://habits.olivers.cloud/sitemap.xml

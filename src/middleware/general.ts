@@ -39,4 +39,4 @@ export function templateGlobalsMiddleware(
 
 export const sitemapMiddleware = expressSitemapXML(() => {
   return ["/", "/signin", "/signup", "/privacy-policy"];
-}, "https://dailydoit.online");
+}, "https://habits.olivers.cloud");

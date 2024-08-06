@@ -1,15 +1,15 @@
-![Daily Do It - Simple Daily Habit Tracking](https://dailydoit.online/img/og-v1.jpg)
+![Daily Do It - Simple Daily Habit Tracking](https://habits.olivers.cloud/img/og-v1.jpg)
 
 <div align='center'>
-  <h1><a href="https://dailydoit.online/">Daily Do It</a></h1>
+  <h1><a href="https://habits.olivers.cloud/">Daily Do It</a></h1>
   <img alt="GitHub" src="https://img.shields.io/github/license/ollieri3/daily-do-it">
 </div>
 
 ## 💬 Introduction
 
-This repository contains the source code for the [Daily Do It](https://dailydoit.online/) application. A simple habit tracking tool.
+This repository contains the source code for the [Daily Do It](https://habits.olivers.cloud/) application. A simple habit tracking tool.
 
-**You can read more about Daily Do It on [the project homepage](https://dailydoit.online/).**
+**You can read more about Daily Do It on [the project homepage](https://habits.olivers.cloud/).**
 
 ## 🏃 Getting up and running
 
