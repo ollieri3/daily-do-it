@@ -18,7 +18,7 @@ type SendOptions = {
 };
 async function send({ to, subject, html }: SendOptions) {
   await transporter.sendMail({
-    from: '"Daily Do It" <support@dailydoit.online>',
+    from: '"Daily Do It" <dailydoit@olivers.cloud>',
     to,
     subject,
     html,
@@ -32,7 +32,7 @@ type SendPlainOptions = {
 };
 async function sendPlain({ to, subject, text }: SendPlainOptions) {
   await transporter.sendMail({
-    from: '"Daily Do It" <support@dailydoit.online>',
+    from: '"Daily Do It" <dailydoit@olivers.cloud>',
     to,
     subject,
     text,
