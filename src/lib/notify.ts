@@ -31,7 +31,8 @@ async function sendAccountConfirmationEmail(
 
   const subject = "Confirm your Daily Do It account";
   const protocol = ENV.DEPLOYMENT === "dev" ? "http" : "https";
-  const host = ENV.DEPLOYMENT === "dev" ? "localhost:8000" : "dailydoit.online";
+  const host =
+    ENV.DEPLOYMENT === "dev" ? "localhost:8000" : "habits.olivers.cloud";
   const activateURL = `${protocol}://${host}/activate/${token}`;
   await mail.send({
     to: accountEmail,
